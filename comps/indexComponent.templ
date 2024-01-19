@@ -1,0 +1,51 @@
+package comps
+
+templ IndexComponent() {
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
+        <style type="text/css">
+            .hght-0 {
+                background-color: #000080; /* Deep ocean blue */
+            }
+            .hght-1 {
+                background-color: #000080; /* Deep ocean blue */
+            }
+            .hght-2 {
+                background-color: #0000CD; /* Darker blue */
+            }
+            .hght-3 {
+                background-color: #1E90FF; /* Ocean blue */
+            }
+            .hght-4 {
+                background-color: #1E90FF; /* Ocean blue */
+            }
+            .hght-5 {
+                background-color: #32CD32; /* Grassland green */
+            }
+            .hght-6 {
+                background-color: #9ACD32; /* Lighter green, representing plains or low hills */
+            }
+            .hght-7 {
+                background-color: #D3D3D3; /* Light grey for lower mountains */
+            }
+            .hght-8 {
+                background-color: #D3D3D3; /* Light grey for lower mountains */
+            }
+            .hght-9 {
+                background-color: #FFFFFF; /* Snow white, highest peaks */
+            }
+        </style>
+        <title>Document</title>
+    </head>
+    <body>
+        <h1>HTMX Terragen</h1>
+        <button hx-get="/new" hx-target="#tileMap" hx-swap="outerHtml">New Map</button>
+        <button hx-get="/display" hx-swap="outerHtml" hx-target="#tileMap">Get Last</button>
+        <div id="tileMap"></div>
+    </body>
+    </html>
+}

@@ -1,0 +1,48 @@
+package comps
+
+import "ago/helper"
+
+import h "ago/helper"
+
+templ TileMapComponent(tileMap TileMap) {
+    <style type="text/css">
+        .tileMap {
+            display: grid;
+            grid-auto-flow: row;
+            width: 100%;
+            height: width;
+        }
+        .tile {
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            // border: 1px solid black;
+            user-select: none;
+            color: transparent;
+            
+        }
+        .tile:hover {
+            background-color: #eee;
+        }
+
+        .row {
+            display: flex;
+            flex-direction: row;
+            flex: 1;
+        }
+
+    </style>
+    <div class="tileMap">
+        for _, tile := range tileMap.Tiles {
+            <div class="row">
+                for _, tile := range tile {
+                    <span hx-get={"/lift/" + helper.Itoa(tile.Id)} hx-swap="innerHtml" class={ "tile", "hght", GetHgtClass(tile.Altitude) }> {h.Itoa(tile.Altitude)} </span>
+                }
+            </div>
+        }
+    </div>
+}
+
+func GetHgtClass(hgt int) string {
+    return "hght-" + h.Itoa(hgt)
+}

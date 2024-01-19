@@ -5,7 +5,7 @@ import "ago/helper"
 import h "ago/helper"
 
 templ TileMapComponent(tileMap TileMap) {
-    <style type="text/css">
+	<style type="text/css">
         .tileMap {
             display: grid;
             grid-auto-flow: row;
@@ -13,16 +13,16 @@ templ TileMapComponent(tileMap TileMap) {
             height: width;
         }
         .tile {
-            width: 20px;
-            height: 20px;
+            width: 80px;
+            height: 80px;
             display: inline-block;
             // border: 1px solid black;
             user-select: none;
-            color: transparent;
+            // color: transparent;
             
         }
         .tile:hover {
-            background-color: #eee;
+            filter: brightness(1.2);
         }
 
         .row {
@@ -32,17 +32,27 @@ templ TileMapComponent(tileMap TileMap) {
         }
 
     </style>
-    <div class="tileMap">
-        for _, tile := range tileMap.Tiles {
-            <div class="row">
-                for _, tile := range tile {
-                    <span hx-get={"/lift/" + helper.Itoa(tile.Id)} hx-swap="innerHtml" class={ "tile", "hght", GetHgtClass(tile.Altitude) }> {h.Itoa(tile.Altitude)} </span>
-                }
-            </div>
-        }
-    </div>
+	<div class="tileMap">
+		for _, tile := range tileMap.Tiles {
+			<div class="row">
+				for _, tile := range tile {
+					<span hx-trigger="mouseenter, click" id={ helper.Itoa(tile.Id) } hx-get={ "/lift/" + helper.Itoa(tile.Id) } hx-swap="outerHTML" class={ "tile", "hght", GetHgtClass(tile.Altitude) }>
+						<div>
+							id: { h.Itoa(tile.Id) }
+							<br/>
+							x: { h.Itoa(tile.X) }
+							<br/>
+							y: { h.Itoa(tile.Y) }
+							<br/>
+							alt: { helper.Itoa(tile.Altitude) }
+						</div>
+					</span>
+				}
+			</div>
+		}
+	</div>
 }
 
 func GetHgtClass(hgt int) string {
-    return "hght-" + h.Itoa(hgt)
+	return "hght-" + h.Itoa(hgt)
 }

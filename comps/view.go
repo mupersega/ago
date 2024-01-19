@@ -28,13 +28,13 @@ func NewTileMap(maxAltitude, width, height int) TileMap {
 		tm.SeedData[i] = make([]int, height)
 	}
 	tm.FillSeedData()
-	tm.SeedData = tm.Smooth(1)
+	tm.SeedData = tm.Smooth(2)
 	tm.SeedData = tm.RandomSmooth()
 	tm.Tiles = tm.GenerateTiles()
 	return tm
 }
 
-func (tm *TileMap) Get(x, y int) int {
+func (tm TileMap) Get(x, y int) int {
 	return tm.SeedData[y][x]
 }
 
@@ -50,7 +50,7 @@ func (tm *TileMap) FillSeedData() {
 	}
 }
 
-func (tm *TileMap) Display() {
+func (tm TileMap) Display() {
 	print("TileMap: ")
 	// print in columns and rows
 	for y := 0; y < tm.Height; y++ {
@@ -62,7 +62,7 @@ func (tm *TileMap) Display() {
 	print(tm.Width)
 }
 
-func (tm *TileMap) Smooth(distance int) [][]int {
+func (tm TileMap) Smooth(distance int) [][]int {
 	smoothed := make([][]int, tm.Width)
 	for i := 0; i < tm.Width; i++ {
 		smoothed[i] = make([]int, tm.Height)
@@ -75,7 +75,7 @@ func (tm *TileMap) Smooth(distance int) [][]int {
 	return smoothed
 }
 
-func (tm *TileMap) SmoothPoint(x, y, distance int) int {
+func (tm TileMap) SmoothPoint(x, y, distance int) int {
 	total := 0
 	count := 0
 
@@ -92,7 +92,7 @@ func (tm *TileMap) SmoothPoint(x, y, distance int) int {
 	return total / count
 }
 
-func (tm *TileMap) RandomSmooth() [][]int {
+func (tm TileMap) RandomSmooth() [][]int {
 	smoothed := make([][]int, tm.Width)
 	for i := 0; i < tm.Width; i++ {
 		smoothed[i] = make([]int, tm.Height)
@@ -105,15 +105,15 @@ func (tm *TileMap) RandomSmooth() [][]int {
 	return smoothed
 }
 
-func (tm *TileMap) GenerateTiles() [][]Tile {
+func (tm TileMap) GenerateTiles() [][]Tile {
 	tiles := make([][]Tile, tm.Width)
 	for i := 0; i < tm.Width; i++ {
 		tiles[i] = make([]Tile, tm.Height)
 	}
 	i := 0
-	for x := 0; x < tm.Width; x++ {
-		for y := 0; y < tm.Height; y++ {
-			tiles[x][y] = Tile{
+	for y := 0; y < tm.Height; y++ {
+		for x := 0; x < tm.Width; x++ {
+			tiles[y][x] = Tile{
 				Id:       i,
 				Altitude: tm.Get(x, y),
 				X:        x,

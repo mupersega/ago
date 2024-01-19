@@ -1,7 +1,18 @@
 
 package comps
+
 import "ago/helper"
 
 templ TileComponent(tile Tile) {
-    <span hx-get={"/lift/" + helper.Itoa(tile.Id)} hx-swap="innerHtml" class={ "tile", "hght", GetHgtClass(tile.Altitude) }> {helper.Itoa(tile.Altitude)} </span>
+	<span hx-trigger="mouseenter, click" id={ helper.Itoa(tile.Id) } hx-get={ "/lift/" + helper.Itoa(tile.Id) } hx-swap="outerHTML" class={ "tile", "hght", GetHgtClass(tile.Altitude) }>
+		<div>
+			id: { helper.Itoa(tile.Id) }
+			<br/>
+			x: { helper.Itoa(tile.X) }
+			<br/>
+			y: { helper.Itoa(tile.Y) }
+            <br/>
+            alt: { helper.Itoa(tile.Altitude) }
+		</div>
+	</span>
 }

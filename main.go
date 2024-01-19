@@ -23,7 +23,7 @@ func main() {
 	})
 
 	r.Get("/new", func(w http.ResponseWriter, r *http.Request) {
-		tm := comps.NewTileMap(11, 5, 5)
+		tm := comps.NewTileMap(11, 10, 10)
 
 		user := store.GetUser(helper.GetIpFromRequest(r))
 		store.SetTileMap(user.IP, tm)
@@ -46,7 +46,7 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
-		println("id:", id)
+		// println("id:", id)
 		// get user
 		user := store.GetUser(helper.GetIpFromRequest(r))
 		// get tilemap
@@ -64,8 +64,9 @@ func main() {
 		// set altitude in tilemap
 		tileMap.Set(x, y, altInt)
 		// // store tilemap
+		tileMap.Tiles = tileMap.GenerateTiles()
 		// store.SetTileMap(user.IP, tileMap)
-		tileMap.Display()
+		// tileMap.Display()
 		// return just the tile
 		templ.Handler(comps.TileComponent(tileMap.Tiles[y][x])).ServeHTTP(w, r)
 	})
@@ -79,7 +80,7 @@ func deduceXYFromId(id int, tileMap comps.TileMap) (x, y int, err error) {
 		// Return an error as dividing by zero is not allowed
 		return 0, 0, fmt.Errorf("tileMap.Width is zero, division by zero is not allowed")
 	}
-
+	fmt.Println("width: ", tileMap.Width)
 	x = id % tileMap.Width
 	y = id / tileMap.Width
 	return x, y, nil

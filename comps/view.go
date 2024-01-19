@@ -115,7 +115,7 @@ func (tm TileMap) GenerateTiles() [][]Tile {
 		for x := 0; x < tm.Width; x++ {
 			tiles[y][x] = Tile{
 				Id:       i,
-				Altitude: tm.Get(x, y),
+				Altitude: tm.AltAt(x, y),
 				X:        x,
 				Y:        y,
 			}

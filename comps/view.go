@@ -34,7 +34,7 @@ func NewTileMap(maxAltitude, width, height int) TileMap {
 	return tm
 }
 
-func (tm TileMap) Get(x, y int) int {
+func (tm TileMap) AltAt(x, y int) int {
 	return tm.SeedData[y][x]
 }
 
@@ -55,7 +55,7 @@ func (tm TileMap) Display() {
 	// print in columns and rows
 	for y := 0; y < tm.Height; y++ {
 		for x := 0; x < tm.Width; x++ {
-			print(tm.Get(x, y), " ")
+			print(tm.AltAt(x, y), " ")
 		}
 		println()
 	}
@@ -84,7 +84,7 @@ func (tm TileMap) SmoothPoint(x, y, distance int) int {
 			wrappedX := (x + dx + tm.Width) % tm.Width
 			wrappedY := (y + dy + tm.Height) % tm.Height
 
-			total += tm.Get(wrappedX, wrappedY)
+			total += tm.AltAt(wrappedX, wrappedY)
 			count++
 		}
 	}

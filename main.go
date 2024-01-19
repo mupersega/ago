@@ -58,9 +58,11 @@ func main() {
 			panic(err)
 		}
 		// get altitude from tilemap
-		altInt := tileMap.Get(x, y)
+		altInt := tileMap.AltAt(x, y)
 		// increment altitude
-		altInt++
+		if altInt < tileMap.MaxAltitude {
+			altInt++
+		}
 		// set altitude in tilemap
 		tileMap.Set(x, y, altInt)
 		// // store tilemap

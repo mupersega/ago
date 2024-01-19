@@ -1,6 +1,5 @@
 package comps
 
-import "ago/helper"
 
 import h "ago/helper"
 
@@ -36,17 +35,7 @@ templ TileMapComponent(tileMap TileMap) {
 		for _, tile := range tileMap.Tiles {
 			<div class="row">
 				for _, tile := range tile {
-					<span hx-trigger="mouseenter, click" id={ helper.Itoa(tile.Id) } hx-get={ "/lift/" + helper.Itoa(tile.Id) } hx-swap="outerHTML" class={ "tile", "hght", GetHgtClass(tile.Altitude) }>
-						<div>
-							id: { h.Itoa(tile.Id) }
-							<br/>
-							x: { h.Itoa(tile.X) }
-							<br/>
-							y: { h.Itoa(tile.Y) }
-							<br/>
-							alt: { helper.Itoa(tile.Altitude) }
-						</div>
-					</span>
+				    @TileComponent(tile)
 				}
 			</div>
 		}

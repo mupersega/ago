@@ -7,11 +7,19 @@ templ IndexComponent() {
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 			<script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
 			<script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
+            <link rel="preconnect" href="https://fonts.googleapis.com"/>
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+            <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet"/>
 			<style type="text/css">
             * {
                 box-sizing: border-box;
                 margin: 0;
                 padding: 0;
+            }
+
+            body {
+                font-family: 'VT323', monospace;
+                font-size: 20px;
             }
 
             #main-wrapper {
@@ -20,6 +28,37 @@ templ IndexComponent() {
                 align-items: center;
                 justify-content: center;
                 height: 100vh;
+            }
+
+            #header {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: space-between;
+                padding: 10px;
+            }
+
+            #header-actions {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-evenly;
+                width: 100%;
+                gap: 4px;
+                padding: 5px;
+            }
+
+            .button {
+                border-radius: 4px;
+                padding: 10px;
+                border: 2px dotted #ccc;
+                flex: 1;
+                text-align: center;
+            }
+
+            .button:hover {
+                cursor: pointer;
+                background-color: #eee;
             }
 
             .hght-0 {
@@ -93,9 +132,13 @@ templ IndexComponent() {
 		</head>
 		<body>
 			<div id="main-wrapper">
-				<h1>HTMX Terragen</h1>
-				<button hx-get="/new" hx-target="#tileMap" hx-swap="outerHtml">New Map</button>
-				<button hx-get="/display" hx-swap="outerHtml" hx-target="#tileMap">Get Last</button>
+                <div id="header">
+                    <h1>HTMX Terragen</h1>
+                    <div id="header-actions">
+                        <div class="button" hx-get="/new" hx-target="#tileMap" hx-swap="outerHtml">New Map</div>
+                        <div class="button" hx-get="/display" hx-swap="outerHtml" hx-target="#tileMap">Get Last</div>
+                    </div>
+                </div>
 				<div id="tileMap"></div>
 				@WorldOptionsComponent()
 			</div>
@@ -161,7 +204,7 @@ templ IndexComponent() {
 // │                                                               │  │ └───────────┘ │
 // │                                                               │  │               │
 // └───────────────────────────────────────────────────────────────┘  └───────────────┘
-// 3. Bring in world options from off screen
+// 3. Bring in world options from off screen and move title right to above options
 // ┌──────────────────────┬─────────────────┬──────────────────────┐
 // │                      │  HTMX TERRAGEN  │                      │
 // │                      │                 │                      │

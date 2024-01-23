@@ -41,7 +41,7 @@ func IndexComponent() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</script><style type=\"text/css\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</script><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin><link href=\"https://fonts.googleapis.com/css2?family=VT323&amp;display=swap\" rel=\"stylesheet\"><style type=\"text/css\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -52,12 +52,48 @@ func IndexComponent() templ.Component {
                 padding: 0;
             }
 
+            body {
+                font-family: 'VT323', monospace;
+                font-size: 20px;
+            }
+
             #main-wrapper {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
                 height: 100vh;
+            }
+
+            #header {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: space-between;
+                padding: 10px;
+            }
+
+            #header-actions {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-evenly;
+                width: 100%;
+                gap: 4px;
+                padding: 5px;
+            }
+
+            .button {
+                border-radius: 4px;
+                padding: 10px;
+                border: 2px dotted #ccc;
+                flex: 1;
+                text-align: center;
+            }
+
+            .button:hover {
+                cursor: pointer;
+                background-color: #eee;
             }
 
             .hght-0 {
@@ -148,7 +184,7 @@ func IndexComponent() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</title></head><body><div id=\"main-wrapper\"><h1>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</title></head><body><div id=\"main-wrapper\"><div id=\"header\"><h1>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -157,7 +193,7 @@ func IndexComponent() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h1><button hx-get=\"/new\" hx-target=\"#tileMap\" hx-swap=\"outerHtml\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h1><div id=\"header-actions\"><div class=\"button\" hx-get=\"/new\" hx-target=\"#tileMap\" hx-swap=\"outerHtml\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -166,7 +202,7 @@ func IndexComponent() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button> <button hx-get=\"/display\" hx-swap=\"outerHtml\" hx-target=\"#tileMap\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"button\" hx-get=\"/display\" hx-swap=\"outerHtml\" hx-target=\"#tileMap\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -175,7 +211,7 @@ func IndexComponent() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button><div id=\"tileMap\"></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div></div><div id=\"tileMap\"></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -252,7 +288,7 @@ func IndexComponent() templ.Component {
 // │                                                               │  │ └───────────┘ │
 // │                                                               │  │               │
 // └───────────────────────────────────────────────────────────────┘  └───────────────┘
-// 3. Bring in world options from off screen
+// 3. Bring in world options from off screen and move title right to above options
 // ┌──────────────────────┬─────────────────┬──────────────────────┐
 // │                      │  HTMX TERRAGEN  │                      │
 // │                      │                 │                      │

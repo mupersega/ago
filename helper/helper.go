@@ -29,6 +29,14 @@ func Itoa(i int) string {
 	return strconv.Itoa(i)
 }
 
+func Atoi(s string) int {
+	i, err := strconv.Atoi(s)
+	if err != nil {
+		panic(err)
+	}
+	return i
+}
+
 func GetIpFromRequest(r *http.Request) string {
 	return r.RemoteAddr
 }

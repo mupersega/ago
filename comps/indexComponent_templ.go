@@ -90,7 +90,7 @@ func IndexComponent() templ.Component {
              * @param {Event} e
              */
             function ReTrigger(e) {
-                if (e.type === "mouseover" && e.shiftKey === false) {
+                if (e.type === "mouseover" && e.shiftKey === false && e.ctrlKey === false) {
                     return
                 }
                 var target = e.currentTarget;
@@ -101,7 +101,13 @@ func IndexComponent() templ.Component {
                     return
                 }
                 var event = new CustomEvent("lift");
-                target.dispatchEvent(event);
+                var magnitude = 1;
+                var shapeEvent = new CustomEvent("shape", {
+                    detail: {
+                        magnitude: e.shiftKey ? magnitude : -1 * magnitude,
+                    },
+                });
+                target.dispatchEvent(shapeEvent);
             }
             htmx.on("htmx:load", function (e) {
                 var element = e.detail.elt;

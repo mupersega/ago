@@ -1,13 +1,13 @@
 package comps
 
 templ IndexComponent() {
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
-        <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
-        <style type="text/css">
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
+			<script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
+			<style type="text/css">
             .hght-0 {
                 background-color: #000080; /* Deep ocean blue */
             }
@@ -39,12 +39,12 @@ templ IndexComponent() {
                 background-color: #FFFFFF; /* Snow white, highest peaks */
             }
         </style>
-        <script>
+			<script>
             /**
              * @param {Event} e
              */
             function ReTrigger(e) {
-                if (e.type === "mouseover" && e.shiftKey === false) {
+                if (e.type === "mouseover" && e.shiftKey === false && e.ctrlKey === false) {
                     return
                 }
                 var target = e.currentTarget;
@@ -55,7 +55,13 @@ templ IndexComponent() {
                     return
                 }
                 var event = new CustomEvent("lift");
-                target.dispatchEvent(event);
+                var magnitude = 1;
+                var shapeEvent = new CustomEvent("shape", {
+                    detail: {
+                        magnitude: e.shiftKey ? magnitude : -1 * magnitude,
+                    },
+                });
+                target.dispatchEvent(shapeEvent);
             }
             htmx.on("htmx:load", function (e) {
                 var element = e.detail.elt;
@@ -69,13 +75,13 @@ templ IndexComponent() {
                 }
             });
         </script>
-        <title>Document</title>
-    </head>
-    <body>
-        <h1>HTMX Terragen</h1>
-        <button hx-get="/new" hx-target="#tileMap" hx-swap="outerHtml">New Map</button>
-        <button hx-get="/display" hx-swap="outerHtml" hx-target="#tileMap">Get Last</button>
-        <div id="tileMap"></div>
-    </body>
-    </html>
+			<title>Document</title>
+		</head>
+		<body>
+			<h1>HTMX Terragen</h1>
+			<button hx-get="/new" hx-target="#tileMap" hx-swap="outerHtml">New Map</button>
+			<button hx-get="/display" hx-swap="outerHtml" hx-target="#tileMap">Get Last</button>
+			<div id="tileMap"></div>
+		</body>
+	</html>
 }

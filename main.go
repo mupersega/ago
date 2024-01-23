@@ -40,12 +40,18 @@ func main() {
 		}
 	})
 
-	r.Get("/lift/{id}", func(w http.ResponseWriter, r *http.Request) {
+	r.Post("/shape/{id}", func(w http.ResponseWriter, r *http.Request) {
 		// get id param
 		id, err := strconv.Atoi(chi.URLParam(r, "id"))
 		if err != nil {
 			panic(err)
 		}
+		r.ParseForm()                        // Parses the request body
+		magnitude := r.Form.Get("magnitude") // x will be "" if parameter is not set
+		if err != nil {
+			panic(err)
+		}
+		println("magnitude:", magnitude)
 		// println("id:", id)
 		// get user
 		user := store.GetUser(helper.GetIpFromRequest(r))
@@ -61,7 +67,13 @@ func main() {
 		altInt := tileMap.AltAt(x, y)
 		// increment altitude
 		if altInt < tileMap.MaxAltitude {
-			altInt++
+			altInt += helper.Atoi(magnitude)
+		}
+		if altInt > tileMap.MaxAltitude {
+			altInt = tileMap.MaxAltitude
+		}
+		if altInt < 0 {
+			altInt = 0
 		}
 		// set altitude in tilemap
 		tileMap.Set(x, y, altInt)

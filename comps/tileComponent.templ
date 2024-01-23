@@ -4,7 +4,7 @@ package comps
 import "ago/helper"
 
 templ TileComponent(tile Tile) {
-	<span hx-trigger="lift" id={ helper.Itoa(tile.Id) } hx-get={ "/lift/" + helper.Itoa(tile.Id) } hx-swap="outerHTML" class={ "tile", "hght", GetHgtClass(tile.Altitude) }>
+	<span hx-trigger="shape" id={ helper.Itoa(tile.Id) } hx-post={ "/shape/" + helper.Itoa(tile.Id) } hx-vals='js:{magnitude: event.detail.magnitude}' hx-swap="outerHTML" class={ "tile", "hght", GetHgtClass(tile.Altitude) }>
 		<div>
 		</div>
 	</span>

@@ -4,6 +4,7 @@ package comps
 import "ago/helper"
 
 templ TileComponent(tile Tile) {
+	// BUG: There is a security issue here with the js: prefix.  It is possible to inject arbitrary javascript into the page.
 	<span hx-trigger="shape" id={ helper.Itoa(tile.Id) } hx-post={ "/shape/" + helper.Itoa(tile.Id) } hx-vals='js:{magnitude: event.detail.magnitude}' hx-swap="outerHTML" class={ "tile", "hght", GetHgtClass(tile.Altitude) }>
 		<div>
 		</div>

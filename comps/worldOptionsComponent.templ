@@ -1,0 +1,61 @@
+package comps
+
+templ WorldOptionsComponent() {
+    <style type="text/css">
+        #options {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: space-between;
+        }
+    </style>
+    <div id="options">
+        <div>
+            <div id="mode-indicator">
+                <div id="lifting">up</div>
+                <div id="lowering">down</div>
+            </div>
+            <div id="smooth-all">smoothall</div>    
+            <div id="smooth-edited">smoothedited</div>
+            <div id="magnitude-selector">
+                // emmet div.magnitude-option{$}*10
+                <div class="magnitude-option">1</div>
+                <div class="magnitude-option">2</div>
+                <div class="magnitude-option">3</div>
+                <div class="magnitude-option">4</div>
+                <div class="magnitude-option">5</div>
+                <div class="magnitude-option">6</div>
+                <div class="magnitude-option">7</div>
+                <div class="magnitude-option">8</div>
+                <div class="magnitude-option">9</div>
+                <div class="magnitude-option">10</div>
+            </div>         
+        </div>
+    </div>
+}
+
+// ┌───────────────┐
+// │               │
+// │   ┌───────┐   │
+// │   │   ▲   │   │ mode indicator
+// │   ├───────┤   │
+// │   │   ▼   │   │
+// │   └───────┘   │
+// │               │
+// │   ┌───────┐   │
+// │   │       │   │ smooth all
+// │   │       │   │
+// │   └───────┘   │
+// │               │
+// │   ┌───────┐   │
+// │   │       │   │ smooth edited
+// │   │       │   │
+// │   └───────┘   │
+// │               │
+// │ ┌───────────┐ │ magnitude selector
+// │ │┼┼┼┼┼┼┼┼┼┼┼│ │
+// │ └───────────┘ │
+// │               │
+// └───────────────┘

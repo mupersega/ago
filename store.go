@@ -10,9 +10,10 @@ type Store struct {
 }
 
 type UserStore struct {
-	IP      string
-	KV      map[string]string
-	TileMap comps.TileMap
+	IP             string
+	KV             map[string]string
+	TileMap        comps.TileMap
+	PointsToSmooth []int
 }
 
 func NewStore() Store {

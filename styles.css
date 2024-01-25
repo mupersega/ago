@@ -1,5 +1,5 @@
 .hght-0 {
-    background-color: #000080; /* Deep ocean blue */
+    background-color: #000040; /* Deep ocean blue */
 }
 .hght-1 {
     background-color: #000080; /* Deep ocean blue */
@@ -27,4 +27,8 @@
 }
 .hght-9 {
     background-color: #eee; /* Snow white, highest peaks */
+}
+
+.hght-9 {
+    background-color: #dc7200; /* Snow white, highest peaks */
 }

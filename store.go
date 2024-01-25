@@ -10,15 +10,10 @@ type Store struct {
 }
 
 type UserStore struct {
-	IP             string
-	KV             map[string]string
-	TileMap        comps.TileMap
-	PointsToSmooth []Coord
-}
-
-type Coord struct {
-	X int
-	Y int
+	IP           string
+	KV           map[string]string
+	TileMap      comps.TileMap
+	EditedPoints []comps.Coord
 }
 
 func NewStore() Store {
@@ -69,4 +64,32 @@ func (s *Store) DisplayStore() {
 		}
 		user.TileMap.Display()
 	}
+}
+
+func (s *Store) GetEditedPoints(ip string) []comps.Coord {
+	return s.GetUser(ip).EditedPoints
+}
+
+func (s *Store) SetEditedPoints(ip string, points []comps.Coord) {
+	user := s.GetUser(ip)
+	user.EditedPoints = points
+	s.SetUser(ip, user)
+}
+
+func (s *Store) AddEditedPoint(ip string, point comps.Coord) {
+	// add point only if it doesn't already exist
+	user := s.GetUser(ip)
+	for _, editedPoint := range user.EditedPoints {
+		if editedPoint == point {
+			return
+		}
+	}
+	user.EditedPoints = append(user.EditedPoints, point)
+	s.SetUser(ip, user)
+}
+
+func (s *Store) ClearEditedPoints(ip string) {
+	user := s.GetUser(ip)
+	user.EditedPoints = make([]comps.Coord, 0)
+	s.SetUser(ip, user)
 }

@@ -31,7 +31,7 @@ func OptionsComponent() templ.Component {
         #options {
             position: absolute;
             top: 0;
-            right: 0;
+            right: -200;
             width: fit-content;
             height: 100%;
             display: flex;
@@ -39,11 +39,15 @@ func OptionsComponent() templ.Component {
             justify-content: center;
             align-items: center;
             pointer-events: none;
+        }
 
+        #options.loaded {
+            right: 0;
+            transition: right 0.5s;
         }
 
         #options-group {
-                border: 2px dotted #ccc;
+            border: 2px dotted #ccc;
             padding: 10px;
             border-radius: 4px;
             display: flex;
@@ -63,20 +67,44 @@ func OptionsComponent() templ.Component {
             border-radius: 4px;
         }
 
+        .mode {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            user-select: none;
+        }
+
         #lifting {
-            border-bottom: 1px solid #eee;
+            border-radius: 4px 4px 0 0;
+            color: #02a50d;
         }
 
         #lifting.active {
-            background-color: #32CD32;
+            background-color: #02a50d;
+            color: #fff;
+            transform-origin: bottom;
+        }
+
+        #lowering {
+            color: #2dc7ff;
+            border-radius: 0 0 4px 4px;
         }
 
         #lowering.active {
-            background-color: #0000CD
+            background-color: #2dc7ff;
+            color: #fff;
+            transform-origin: top;
+        }
+
+        .mode.active {
+            filter: drop-shadow(0 0 5px #333);
+            transition: transform 0.1s;
+            transform: scaleY(1.2);
         }
 
         .mode {
             width: 100%;
+            height: 2em;
             text-align: center;
             color: #aaa;
         }
@@ -88,76 +116,61 @@ func OptionsComponent() templ.Component {
 
         .magnitude-option {
             display: block;
+            aspect-ratio: 1;
+            color: transparent;
         }
 
+        .break {
+            border-bottom: 1px solid #eee;
+            width: 100%;
+        }
 
     `
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var2)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</style><script>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</style><div id=\"options\" _=\"init add .loaded to me\"><div id=\"options-group\"><div id=\"mode-indicator\"><div id=\"lifting\" class=\"mode\" _=\"on mouseenter put &#39;shift+&lt;br&gt; click|hover&#39; into me end on mouseleave put &#39;▲&#39; into me\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Var3 := `
-        // add control and shift keydown listeners
-        window.addEventListener('keydown', (e) => {
-            if (e.key === 'Shift') {
-                document.getElementById('lifting').classList.add('active')
-            }
-            if (e.key === 'Control') {
-                document.getElementById('lowering').classList.add('active')
-            }
-        })
-
-        // add control and shift keyup listeners
-        window.addEventListener('keyup', (e) => {
-            if (e.key === 'Shift') {
-                document.getElementById('lifting').classList.remove('active')
-            }
-            if (e.key === 'Control') {
-                document.getElementById('lowering').classList.remove('active')
-            }
-        })
-
-    `
+		templ_7745c5c3_Var3 := `▲`
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var3)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</script><div id=\"options\"><div id=\"options-group\"><div id=\"mode-indicator\"><div id=\"lifting\" class=\"mode\" _=\"on keydown log event\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"break\"></div><div id=\"lowering\" class=\"mode\" _=\"on mouseenter put &#39;ctrl+&lt;br&gt;click|hover&#39; into me end on mouseleave put &#39;▼&#39; into me\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Var4 := `shift+click`
+		templ_7745c5c3_Var4 := `▼`
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var4)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div id=\"lowering\" class=\"mode\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div><div id=\"smooth-all\" class=\"button\" hx-trigger=\"click\" hx-get=\"/smooth\" hx-target=\"#tileMap\" hx-swap=\"outerHTML\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Var5 := `ctrl+click`
+		templ_7745c5c3_Var5 := `smoothall`
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var5)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div><div id=\"smooth-all\" hx-trigger=\"click\" class=\"button\" hx-get=\"/smooth\" hx-target=\"#tileMap\" hx-swap=\"outerHTML\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div id=\"smooth-edited\" class=\"button\" hx-trigger=\"click\" hx-get=\"/smoothedited\" hx-target=\"#tileMap\" hx-swap=\"outerHTML\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Var6 := `smoothall`
+		templ_7745c5c3_Var6 := `smoothedited`
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var6)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div id=\"smooth-edited\" class=\"button\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Var7 := `smoothedited`
+		templ_7745c5c3_Var7 := `to edit: `
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var7)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err

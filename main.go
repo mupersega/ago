@@ -23,7 +23,7 @@ func main() {
 	})
 
 	r.Get("/new", func(w http.ResponseWriter, r *http.Request) {
-		tm := comps.NewTileMap(11, 10, 10)
+		tm := comps.NewTileMap(10, 40, 40)
 
 		user := store.GetUser(helper.GetIpFromRequest(r))
 		store.SetTileMap(user.IP, tm)
@@ -46,8 +46,8 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
-		r.ParseForm()                        // Parses the request body
-		magnitude := r.Form.Get("magnitude") // x will be "" if parameter is not set
+		r.ParseForm()
+		magnitude := r.Form.Get("magnitude")
 		if err != nil {
 			panic(err)
 		}
@@ -66,9 +66,7 @@ func main() {
 		// get altitude from tilemap
 		altInt := tileMap.AltAt(x, y)
 		// increment altitude
-		if altInt < tileMap.MaxAltitude {
-			altInt += helper.Atoi(magnitude)
-		}
+		altInt += helper.Atoi(magnitude)
 		if altInt > tileMap.MaxAltitude {
 			altInt = tileMap.MaxAltitude
 		}
@@ -77,16 +75,28 @@ func main() {
 		}
 		// set altitude in tilemap
 		tileMap.Set(x, y, altInt)
-		// // store tilemap
+		// regenerate tiles and set user tilemap
 		tileMap.Tiles = tileMap.GenerateTiles()
-		// store.SetTileMap(user.IP, tileMap)
-		// tileMap.Display()
+		store.SetTileMap(user.IP, tileMap)
 		// return just the tile
 		templ.Handler(comps.TileComponent(tileMap.Tiles[y][x])).ServeHTTP(w, r)
 	})
 
-	http.ListenAndServe("127.0.0.1:3000", r)
+	r.Get("/options", func(w http.ResponseWriter, r *http.Request) {
+		templ.Handler(comps.OptionsComponent()).ServeHTTP(w, r)
+	})
 
+	r.Get("/smooth", func(w http.ResponseWriter, r *http.Request) {
+		user := store.GetUser(helper.GetIpFromRequest(r))
+		if user.TileMap.Width != 0 {
+			user.TileMap.SeedData = user.TileMap.Smooth(1)
+			user.TileMap.Tiles = user.TileMap.GenerateTiles()
+			store.SetTileMap(user.IP, user.TileMap)
+			templ.Handler(comps.TileMapComponent(user.TileMap)).ServeHTTP(w, r)
+		}
+	})
+
+	http.ListenAndServe("127.0.0.1:3000", r)
 }
 
 func deduceXYFromId(id int, tileMap comps.TileMap) (x, y int, err error) {

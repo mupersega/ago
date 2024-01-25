@@ -1,43 +1,13 @@
 package comps
 
-
 import h "ago/helper"
 
 templ TileMapComponent(tileMap TileMap) {
-	<style type="text/css">
-        .tileMap {
-            display: grid;
-            grid-auto-flow: row;
-            width: 100%;
-            height: width;
-        }
-        .tile {
-            width: 80px;
-            height: 80px;
-            display: inline-block;
-            // border: 1px solid black;
-            user-select: none;
-            // color: transparent;
-            
-        }
-        .tile:hover {
-            filter: brightness(1.2);
-        }
-
-        .row {
-            display: flex;
-            flex-direction: row;
-            flex: 1;
-        }
-
-    </style>
-	<div class="tileMap">
+	<div id="tileMap" hx-get="/options" hx-trigger="mouseenter once" hx-target="#options" hx-swap="outerHTML">
 		for _, tile := range tileMap.Tiles {
-			<div class="row">
-				for _, tile := range tile {
-				    @TileComponent(tile)
-				}
-			</div>
+			for _, tile := range tile {
+				@TileComponent(tile)
+			}
 		}
 	</div>
 }

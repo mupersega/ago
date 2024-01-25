@@ -25,59 +25,16 @@ func TileMapComponent(tileMap TileMap) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<style type=\"text/css\">")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Var2 := `
-        .tileMap {
-            display: grid;
-            grid-auto-flow: row;
-            width: 100%;
-            height: width;
-        }
-        .tile {
-            width: 80px;
-            height: 80px;
-            display: inline-block;
-            // border: 1px solid black;
-            user-select: none;
-            // color: transparent;
-            
-        }
-        .tile:hover {
-            filter: brightness(1.2);
-        }
-
-        .row {
-            display: flex;
-            flex-direction: row;
-            flex: 1;
-        }
-
-    `
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var2)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</style><div class=\"tileMap\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"tileMap\" hx-get=\"/options\" hx-trigger=\"mouseenter once\" hx-target=\"#options\" hx-swap=\"outerHTML\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		for _, tile := range tileMap.Tiles {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"row\">")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
 			for _, tile := range tile {
 				templ_7745c5c3_Err = TileComponent(tile).Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div>")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
 			}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div>")

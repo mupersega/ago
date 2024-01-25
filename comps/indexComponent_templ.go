@@ -55,14 +55,18 @@ func IndexComponent() templ.Component {
             body {
                 font-family: 'VT323', monospace;
                 font-size: 20px;
+                height: 100vh;
+                width: 100vw;
             }
 
             #main-wrapper {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                justify-content: center;
-                height: 100vh;
+                // justify-content: center;
+                width: 100%;
+                height: 100%;
+                padding: 10px;
             }
 
             #header {
@@ -96,36 +100,64 @@ func IndexComponent() templ.Component {
                 background-color: #eee;
             }
 
-            .hght-0 {
-                background-color: #000080; /* Deep ocean blue */
+            #tileMap {
+                display: grid;
+                grid-template-columns: repeat(40, 1fr);
+                grid-template-rows: repeat(40, 1fr);
+                aspect-ratio: 1 / 1; /* Ensures the width and height are equal */
+                overflow: auto;
+                flex: 1;
+                border-radius: 4px;
+                border: 2px dotted #ccc;
             }
-            .hght-1 {
-                background-color: #000080; /* Deep ocean blue */
+
+            .tile {
+                display: block;
+                user-select: none;
+                color: transparent;
             }
-            .hght-2 {
-                background-color: #0000CD; /* Darker blue */
+
+            .tile:hover {
+                filter: brightness(1.2);
+                color: #999;
             }
-            .hght-3 {
-                background-color: #1E90FF; /* Ocean blue */
+
+            .row {
+                display: flex;
+                flex-direction: row;
+                flex: 1;
             }
-            .hght-4 {
-                background-color: #1E90FF; /* Ocean blue */
-            }
-            .hght-5 {
-                background-color: #32CD32; /* Grassland green */
-            }
-            .hght-6 {
-                background-color: #9ACD32; /* Lighter green, representing plains or low hills */
-            }
-            .hght-7 {
-                background-color: #D3D3D3; /* Light grey for lower mountains */
-            }
-            .hght-8 {
-                background-color: #D3D3D3; /* Light grey for lower mountains */
-            }
-            .hght-9 {
-                background-color: #FFFFFF; /* Snow white, highest peaks */
-            }
+
+.hght-0 {
+    background-color: #000080; /* Deep ocean blue */
+}
+.hght-1 {
+    background-color: #000080; /* Deep ocean blue */
+}
+.hght-2 {
+    background-color: #0000CD; /* Darker blue */
+}
+.hght-3 {
+    background-color: #1E90FF; /* Ocean blue */
+}
+.hght-4 {
+    background-color: #2dc7ff; /* Ocean blue */
+}
+.hght-5 {
+    background-color: #02a50d; /* Grassland green */
+}
+.hght-6 {
+    background-color: #1d6200; /* Lighter green, representing plains or low hills */
+}
+.hght-7 {
+    background-color: #6b4429; /* Dark brown, representing mountains */
+}
+.hght-8 {
+    background-color: #838383; /* Light grey for lower mountains */
+}
+.hght-9 {
+    background-color: #EEE; /* Snow white, highest peaks */
+}
         `
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var4)
 		if templ_7745c5c3_Err != nil {
@@ -140,7 +172,7 @@ func IndexComponent() templ.Component {
              * @param {Event} e
              */
             function ReTrigger(e) {
-                if (e.type === "mouseover" && e.shiftKey === false && e.ctrlKey === false) {
+                if ((e.type === "mouseover" || e.type === "click") && e.shiftKey === false && e.ctrlKey === false) {
                     return
                 }
                 var target = e.currentTarget;
@@ -150,7 +182,6 @@ func IndexComponent() templ.Component {
                 if (target.nodeName !== "SPAN") {
                     return
                 }
-                var event = new CustomEvent("lift");
                 var magnitude = 1;
                 var shapeEvent = new CustomEvent("shape", {
                     detail: {
@@ -161,11 +192,15 @@ func IndexComponent() templ.Component {
             }
             htmx.on("htmx:load", function (e) {
                 var element = e.detail.elt;
-                element.querySelectorAll("span").forEach(function (span) {
+
+                // Add event listeners to all 'span.tile' elements within the loaded element
+                element.querySelectorAll("span.tile").forEach(function (span) {
                     span.addEventListener("click", ReTrigger);
                     span.addEventListener("mouseover", ReTrigger);
                 });
-                if (element.nodeName === "SPAN") {
+
+                // If the loaded element itself is a 'span.tile', add event listeners to it
+                if (element.matches("span.tile")) {
                     element.addEventListener("click", ReTrigger);
                     element.addEventListener("mouseover", ReTrigger);
                 }
@@ -193,7 +228,7 @@ func IndexComponent() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h1><div id=\"header-actions\"><div class=\"button\" hx-get=\"/new\" hx-target=\"#tileMap\" hx-swap=\"outerHtml\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h1><div id=\"header-actions\"><div class=\"button\" hx-get=\"/new\" hx-target=\"#tileMap\" hx-swap=\"outerHTML\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -202,7 +237,7 @@ func IndexComponent() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"button\" hx-get=\"/display\" hx-swap=\"outerHtml\" hx-target=\"#tileMap\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"button\" hx-get=\"/display\" hx-swap=\"outerHTML\" hx-target=\"#tileMap\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -211,15 +246,7 @@ func IndexComponent() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div></div><div id=\"tileMap\"></div>")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = WorldOptionsComponent().Render(ctx, templ_7745c5c3_Buffer)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></body></html>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div></div><div id=\"tileMap\" style=\"display:none;\"></div></div><div id=\"options\"></div></body></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

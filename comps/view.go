@@ -67,9 +67,9 @@ func (tm TileMap) Smooth(distance int) [][]int {
 	for i := 0; i < tm.Width; i++ {
 		smoothed[i] = make([]int, tm.Height)
 	}
-	for x := 0; x < tm.Width; x++ {
-		for y := 0; y < tm.Height; y++ {
-			smoothed[x][y] = tm.SmoothPoint(x, y, distance)
+	for y := 0; y < tm.Height; y++ {
+		for x := 0; x < tm.Width; x++ {
+			smoothed[y][x] = tm.SmoothPoint(x, y, distance)
 		}
 	}
 	return smoothed

@@ -1,0 +1,138 @@
+package comps
+
+templ OptionsComponent() {
+    <style type="text/css">
+        #options {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: fit-content;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+
+        }
+
+        #options-group {
+                border: 2px dotted #ccc;
+            padding: 10px;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            pointer-events: all;
+            gap: 10px;
+        }
+
+        #mode-indicator {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            border: 2px solid #eee;
+            border-radius: 4px;
+        }
+
+        #lifting {
+            border-bottom: 1px solid #eee;
+        }
+
+        #lifting.active {
+            background-color: #32CD32;
+        }
+
+        #lowering.active {
+            background-color: #0000CD
+        }
+
+        .mode {
+            width: 100%;
+            text-align: center;
+            color: #aaa;
+        }
+
+        #magnitude-selector {
+            display: grid;
+            grid-auto-flow: column;
+        }
+
+        .magnitude-option {
+            display: block;
+        }
+
+
+    </style>
+    <script>
+        // add control and shift keydown listeners
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Shift') {
+                document.getElementById('lifting').classList.add('active')
+            }
+            if (e.key === 'Control') {
+                document.getElementById('lowering').classList.add('active')
+            }
+        })
+
+        // add control and shift keyup listeners
+        window.addEventListener('keyup', (e) => {
+            if (e.key === 'Shift') {
+                document.getElementById('lifting').classList.remove('active')
+            }
+            if (e.key === 'Control') {
+                document.getElementById('lowering').classList.remove('active')
+            }
+        })
+
+    </script>
+    <div id="options">
+        <div id="options-group">
+            <div id="mode-indicator">
+                <div id="lifting" class="mode" _="on keydown log event">shift+click</div>
+                <div id="lowering" class="mode">ctrl+click</div>
+            </div>
+            <div id="smooth-all" hx-trigger="click" class="button" hx-get="/smooth" hx-target="#tileMap" hx-swap="outerHTML">smoothall</div>    
+            <div id="smooth-edited" class="button">smoothedited</div>
+            <div id="magnitude-selector">
+                // emmet div.magnitude-option{$}*10 
+                <div class="magnitude-option hght-0">_</div>
+                <div class="magnitude-option hght-1">_</div>
+                <div class="magnitude-option hght-2">_</div>
+                <div class="magnitude-option hght-3">_</div>
+                <div class="magnitude-option hght-4">_</div>
+                <div class="magnitude-option hght-5">_</div>
+                <div class="magnitude-option hght-6">_</div>
+                <div class="magnitude-option hght-7">_</div>
+                <div class="magnitude-option hght-8">_</div>
+                <div class="magnitude-option hght-9">_</div>
+            </div>         
+        </div>
+    </div>
+}
+
+// ┌───────────────┐
+// │               │
+// │   ┌───────┐   │
+// │   │   ▲   │   │ mode indicator
+// │   ├───────┤   │
+// │   │   ▼   │   │
+// │   └───────┘   │
+// │               │
+// │   ┌───────┐   │
+// │   │       │   │ smooth all
+// │   │       │   │
+// │   └───────┘   │
+// │               │
+// │   ┌───────┐   │
+// │   │       │   │ smooth edited
+// │   │       │   │
+// │   └───────┘   │
+// │               │
+// │ ┌───────────┐ │ magnitude selector
+// │ │┼┼┼┼┼┼┼┼┼┼┼│ │
+// │ └───────────┘ │
+// │               │
+// └───────────────┘

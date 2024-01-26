@@ -23,7 +23,7 @@ func IndexComponent() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><script src=\"https://unpkg.com/htmx.org@1.9.10\" integrity=\"sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC\" crossorigin=\"anonymous\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><link href=\"https://fonts.googleapis.com/css2?family=VT323&amp;display=swap\" rel=\"stylesheet\"><script src=\"https://unpkg.com/htmx.org@1.9.10\" integrity=\"sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC\" crossorigin=\"anonymous\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -41,11 +41,12 @@ func IndexComponent() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</script><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin><link href=\"https://fonts.googleapis.com/css2?family=VT323&amp;display=swap\" rel=\"stylesheet\"><style type=\"text/css\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</script><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin><style type=\"text/css\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		templ_7745c5c3_Var4 := `
+
             * {
                 box-sizing: border-box;
                 margin: 0;
@@ -54,28 +55,64 @@ func IndexComponent() templ.Component {
 
             body {
                 font-family: 'VT323', monospace;
-                font-size: 20px;
+                font-size: 30px;
                 height: 100vh;
                 width: 100vw;
                 overflow: hidden;
+                opacity: 0;
             }
 
-            #main-wrapper {
+            body.loaded {
+                opacity: 1;
+                transition: opacity 0.2s ease-in-out;
+            }
+
+            #main {
                 display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                width: 100%;
                 height: 100%;
-                padding: 10px;
+                /* align-content: center; */
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+
+            #grid-wrapper {
+                display: grid;
+                grid-template-columns: 1fr;
+                grid-template-rows: max-content minmax(200px, 75%) max-content;
+                grid-template-areas:
+                    "header"
+                    "map"
+                    "options";
+                width: 100%;
+                max-height: 100%;
+                justify-items: center;
+
+                padding: 1em;
             }
 
             #header {
+                position: relative;
+                grid-area: header;
+                bottom: 200px;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 justify-content: space-between;
-                padding: 10px;
+                padding: .6em;
+                background-color: #fff;
+                border-radius: .1em;
+                border: 2px dotted #ccc;
+                max-width: 20%;
+                min-width: fit-content;
+                z-index: 1;
+                gap: .3em;
+            }
+
+            #header.loaded {
+                bottom: -3px;
+                transition: bottom 0.5s ease-in-out;
+                transition-delay: 0.2s;
             }
 
             #header-actions {
@@ -84,16 +121,19 @@ func IndexComponent() templ.Component {
                 align-items: center;
                 justify-content: space-evenly;
                 width: 100%;
-                gap: 4px;
-                padding: 5px;
+                gap: .3em;
             }
 
             .button {
-                border-radius: 4px;
+                border-radius: .1em;
                 padding: 10px;
                 border: 2px dotted #ccc;
                 flex: 1;
                 text-align: center;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                user-select: none;
             }
 
             .button:hover {
@@ -101,24 +141,21 @@ func IndexComponent() templ.Component {
                 background-color: #eee;
             }
 
-            #tileMap {
+            #tile-map {
                 display: grid;
                 grid-template-columns: repeat(30, 1fr);
                 grid-template-rows: repeat(30, 1fr);
                 aspect-ratio: 1 / 1; /* Ensures the width and height are equal */
                 overflow: hidden;
-                flex: 1;
-                max-height: 0;
-            }
-
-            #tileMap.loaded {
                 max-height: 100%;
                 border-radius: 4px;
                 border: 2px dotted #ccc;
-                transition : max-height 0.5s ease-in-out;
-}
-            #tileMap.active {
+                z-index: 1;
+            }
+
+            #tile-map.active {
                 filter: drop-shadow(0 0 5px #333);
+                cursor: crosshair;
             }
 
             .tile {
@@ -132,6 +169,7 @@ func IndexComponent() templ.Component {
             .tile:hover {
                 filter: brightness(1.2);
                 color: #999;
+            border: 1px solid #eee;
             }
 
             .hght-0 {
@@ -166,6 +204,36 @@ func IndexComponent() templ.Component {
             }
             .hght-10 {
                 background-color: #fff; /* Black, representing water */
+            }
+
+            #mapWrapper {
+                display: flex;
+                position: relative;
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                height: 100%;
+                grid-area: map;
+            }
+
+            #sidebarBlock {
+                width: 20%;
+                height: 100%;
+                overflow: hidden;
+            }
+
+            @media (orientation: landscape) {
+                #grid-wrapper {
+                    display: grid;
+                    grid-template-rows: auto 1fr ;
+                    grid-template-columns: 1fr auto;
+                    grid-template-areas: "header header""map options";
+                    background-color: red;
+                }
+                #options-group {
+                    flex-direction: column !important;
+                }
             }
 
         `
@@ -214,19 +282,15 @@ func IndexComponent() templ.Component {
                     element.addEventListener("click", ReTrigger);
                     element.addEventListener("mouseover", ReTrigger);
                 }
-
-                // if (element.matches("div#options")) {
-                //     element.classList.add("loaded");
-                // }
             });
             // add control and shift keydown listeners
             window.addEventListener('keydown', (e) => {
                 if (e.key === 'Shift') {
                     document.getElementById('lifting').classList.add('active')
-                    document.getElementById('tileMap').classList.add('active')
+                    document.getElementById('tile-map').classList.add('active')
                 }
                 if (e.key === 'Control') {
-                    document.getElementById('tileMap').classList.add('active')
+                    document.getElementById('tile-map').classList.add('active')
                     document.getElementById('lowering').classList.add('active')
                 }
             })
@@ -234,11 +298,11 @@ func IndexComponent() templ.Component {
             window.addEventListener('keyup', (e) => {
                 if (e.key === 'Shift') {
                     document.getElementById('lifting').classList.remove('active')
-                    document.getElementById('tileMap').classList.remove('active')
+                    document.getElementById('tile-map').classList.remove('active')
                 }
                 if (e.key === 'Control') {
                     document.getElementById('lowering').classList.remove('active')
-                    document.getElementById('tileMap').classList.remove('active')
+                    document.getElementById('tile-map').classList.remove('active')
                 }
             })
         `
@@ -255,7 +319,7 @@ func IndexComponent() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</title></head><body><div id=\"main-wrapper\"><div id=\"header\"><h1>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</title></head><body _=\"init add .loaded to me\"><div id=\"main\"><div id=\"grid-wrapper\"><div id=\"header\" _=\"init add .loaded to me\"><h1>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -264,7 +328,7 @@ func IndexComponent() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h1><div id=\"header-actions\"><div script=\"on htmx:load log &#39;loaded!!!!&#39;\" class=\"button\" hx-get=\"/new\" hx-target=\"#tileMap\" hx-swap=\"outerHTML\" hx-trigger=\"click\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h1><div id=\"header-actions\"><div class=\"button\" hx-get=\"/new\" hx-target=\"#tile-map\" hx-swap=\"outerHTML\" hx-trigger=\"click\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -273,7 +337,7 @@ func IndexComponent() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"button\" hx-get=\"/display\" hx-swap=\"outerHTML\" hx-target=\"#tileMap\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"button\" hx-get=\"/display\" hx-target=\"#tile-map\" hx-swap=\"outerHTML\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -282,7 +346,7 @@ func IndexComponent() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div></div><div id=\"tileMap\" style=\"display:none;\"></div></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div></div><div id=\"mapWrapper\" _=\"on htmx:load add .loaded to #options then add .right to #header\"><div id=\"tile-map\" style=\"display:none;\"></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -290,7 +354,7 @@ func IndexComponent() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</body></html>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div></body></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -301,7 +365,8 @@ func IndexComponent() templ.Component {
 	})
 }
 
-//  1.
+// THESE ARE ONLY INITIAL CONCEPTS AND MAY NOT REFLECT FINAL COMPONENTS.
+// 1.
 // ┌──────────────────────┬─────────────────┬──────────────────────┐
 // │                      │  HTMX TERRAGEN  │                      │
 // │                      │                 │                      │

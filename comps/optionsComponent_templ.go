@@ -29,42 +29,45 @@ func OptionsComponent() templ.Component {
 		}
 		templ_7745c5c3_Var2 := `
         #options {
-            position: absolute;
-            top: 0;
-            right: -200;
+            grid-area: options;
+            position: relative;
+            top: -200;
             width: fit-content;
-            height: 100%;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             pointer-events: none;
+            opacity: 0;
         }
 
         #options.loaded {
-            right: 0;
-            transition: right 0.5s;
+            opacity: 1;
+            top: -3px;
+            transition: top 0.5s ease-out;
+            transition-delay: 0.5s;
         }
 
         #options-group {
             border: 2px dotted #ccc;
-            padding: 10px;
-            border-radius: 4px;
+            padding: 0.6em;
+            border-radius: 0.1em;
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             justify-content: space-between;
             pointer-events: all;
-            gap: 10px;
+            gap: 0.3em;
+            background-color: #fff;
         }
 
         #mode-indicator {
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             justify-content: center;
             align-items: center;
             width: 100%;
-            border: 2px solid #eee;
-            border-radius: 4px;
+            border: 1px solid #ccc;
+            border-radius: 0.3em;
         }
 
         .mode {
@@ -81,6 +84,7 @@ func OptionsComponent() templ.Component {
 
         #lifting.active {
             background-color: #02a50d;
+            border: 1px solid #1d6200;
             color: #fff;
             transform-origin: bottom;
         }
@@ -92,14 +96,23 @@ func OptionsComponent() templ.Component {
 
         #lowering.active {
             background-color: #2dc7ff;
+            border: 1px solid #1E90FF;
             color: #fff;
             transform-origin: top;
         }
 
+        #height-controls {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 0.3em;
+        }
+
         .mode.active {
-            filter: drop-shadow(0 0 5px #333);
-            transition: transform 0.1s;
-            transform: scaleY(1.2);
+            filter: drop-shadow(0 2px 5px #666);
+            transition: transform 0.1s ease-in;
+            transform: scaleY(1.1);
         }
 
         .mode {
@@ -112,17 +125,27 @@ func OptionsComponent() templ.Component {
         #magnitude-selector {
             display: grid;
             grid-auto-flow: column;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            border-radius: 0.3em;
+            overflow: hidden;
         }
 
         .magnitude-option {
             display: block;
-            aspect-ratio: 1;
+            height: 1em;
+            width: 1em;
             color: transparent;
         }
 
+        .magnitude-option:hover {
+            filter: brightness(1.2);
+            border: 1px solid #eee;
+        }
+
         .break {
-            border-bottom: 1px solid #eee;
-            width: 100%;
+            border-right: 1px solid #eee;
+            height: 95%;
         }
 
     `
@@ -130,52 +153,52 @@ func OptionsComponent() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</style><div id=\"options\" _=\"init add .loaded to me\"><div id=\"options-group\"><div id=\"mode-indicator\"><div id=\"lifting\" class=\"mode\" _=\"on mouseenter put &#39;shift+&lt;br&gt; click|hover&#39; into me end on mouseleave put &#39;▲&#39; into me\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</style><div id=\"options\"><div id=\"options-group\"><div id=\"height-controls\"><div id=\"mode-indicator\"><div id=\"lowering\" class=\"mode\" _=\"on mouseenter put &#39;ctrl+&lt;br&gt;click|hover&#39; into me end on mouseleave put &#39;lower ▼&#39; into me\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Var3 := `▲`
+		templ_7745c5c3_Var3 := `lower ▼`
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var3)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"break\"></div><div id=\"lowering\" class=\"mode\" _=\"on mouseenter put &#39;ctrl+&lt;br&gt;click|hover&#39; into me end on mouseleave put &#39;▼&#39; into me\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"break\"></div><div id=\"lifting\" class=\"mode\" _=\"on mouseenter put &#39;shift+&lt;br&gt; click|hover&#39; into me end on mouseleave put &#39;lift ▲&#39; into me\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Var4 := `▼`
+		templ_7745c5c3_Var4 := `lift ▲`
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var4)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div><div id=\"smooth-all\" class=\"button\" hx-trigger=\"click\" hx-get=\"/smooth\" hx-target=\"#tileMap\" hx-swap=\"outerHTML\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div><div id=\"magnitude-selector\"><div class=\"magnitude-option hght-0\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Var5 := `smoothall`
+		templ_7745c5c3_Var5 := `_`
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var5)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div id=\"smooth-edited\" class=\"button\" hx-trigger=\"click\" hx-get=\"/smoothedited\" hx-target=\"#tileMap\" hx-swap=\"outerHTML\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"magnitude-option hght-1\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Var6 := `smoothedited`
+		templ_7745c5c3_Var6 := `_`
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var6)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"magnitude-option hght-2\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Var7 := `to edit: `
+		templ_7745c5c3_Var7 := `_`
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var7)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div id=\"magnitude-selector\"><div class=\"magnitude-option hght-0\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"magnitude-option hght-3\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -184,7 +207,7 @@ func OptionsComponent() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"magnitude-option hght-1\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"magnitude-option hght-4\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -193,7 +216,7 @@ func OptionsComponent() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"magnitude-option hght-2\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"magnitude-option hght-5\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -202,7 +225,7 @@ func OptionsComponent() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"magnitude-option hght-3\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"magnitude-option hght-6\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -211,7 +234,7 @@ func OptionsComponent() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"magnitude-option hght-4\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"magnitude-option hght-7\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -220,7 +243,7 @@ func OptionsComponent() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"magnitude-option hght-5\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"magnitude-option hght-8\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -229,7 +252,7 @@ func OptionsComponent() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"magnitude-option hght-6\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"magnitude-option hght-9\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -238,34 +261,25 @@ func OptionsComponent() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"magnitude-option hght-7\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div></div><div id=\"smooth-all\" class=\"button\" hx-trigger=\"click\" hx-get=\"/smooth\" hx-target=\"#tile-map\" hx-swap=\"outerHTML\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Var15 := `_`
+		templ_7745c5c3_Var15 := `smooth all`
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var15)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"magnitude-option hght-8\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div id=\"smooth-edited\" class=\"button\" hx-trigger=\"click\" hx-get=\"/smoothedited\" hx-target=\"#tile-map\" hx-swap=\"outerHTML\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Var16 := `_`
+		templ_7745c5c3_Var16 := `smooth edited`
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var16)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"magnitude-option hght-9\">")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Var17 := `_`
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var17)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div></div></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -276,6 +290,8 @@ func OptionsComponent() templ.Component {
 	})
 }
 
+// THESE ARE ONLY INITIAL CONCEPTS AND MAY NOT REFLECT FINAL COMPONENTS.
+//
 // ┌───────────────┐
 // │               │
 // │   ┌───────┐   │

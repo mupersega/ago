@@ -13,5 +13,6 @@ templ TileComponent(tile Tile) {
 		hx-swap="outerHTML"
 		class={ "tile", "hght", GetHgtClass(tile.Altitude) }
 		hx-target="this"
-	>{helper.Itoa(tile.Altitude)}</span>
+	>{helper.Itoa(tile.Altitude)}
+	<span class="htmx-indicator" style="color: bisque">*</span></span>
 }

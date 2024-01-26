@@ -1,3 +1,4 @@
+/* this is just a file to check css styling as you can't do a proper job in templ */
 .hght-0 {
     background-color: #000040; /* Deep ocean blue */
 }
@@ -31,4 +32,11 @@
 
 .hght-9 {
     background-color: #dc7200; /* Snow white, highest peaks */
+}
+
+@media (orientation: landscape) {
+    body {    
+    background-color: red;
+    cursor: crosshair;
+}
 }

@@ -3,7 +3,7 @@ package comps
 import h "ago/helper"
 
 templ TileMapComponent(tileMap TileMap) {
-	<div _="init add .loaded to me end" id="tileMap">
+	<div id="tile-map">
 		for _, tile := range tileMap.Tiles {
 			for _, tile := range tile {
 				@TileComponent(tile)

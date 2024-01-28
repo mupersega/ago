@@ -22,13 +22,13 @@ func main() {
 		templ.Handler(comps.IndexComponent()).ServeHTTP(w, r)
 	})
 
+	r.Handle("/static/*", http.StripPrefix("/static", http.FileServer(http.Dir("static"))))
+
 	r.Get("/new", func(w http.ResponseWriter, r *http.Request) {
 		tm := comps.NewTileMap(10, 30, 30)
 
 		user := store.GetUser(helper.GetIpFromRequest(r))
 		store.SetTileMap(user.IP, tm)
-
-		// store.DisplayStore()
 
 		templ.Handler(comps.TileMapComponent(tm)).ServeHTTP(w, r)
 	})

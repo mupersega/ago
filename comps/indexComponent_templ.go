@@ -41,298 +41,90 @@ func IndexComponent() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</script><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin><style type=\"text/css\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</script><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin><link rel=\"stylesheet\" href=\"/static/style.css\"><link rel=\"stylesheet\" href=\"/static/media.css\"><title>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Var4 := `
-
-            * {
-                box-sizing: border-box;
-                margin: 0;
-                padding: 0;
-            }
-
-            body {
-                font-family: 'VT323', monospace;
-                font-size: 20px;
-                height: 100vh;
-                width: 100vw;
-                overflow: hidden;
-                opacity: 0;
-            }
-
-            body.loaded {
-                opacity: 1;
-                transition: opacity 0.2s ease-in-out;
-            }
-
-            #main {
-                display: flex;
-                height: 100%;
-                /* align-content: center; */
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-            }
-
-            #grid-wrapper {
-                display: grid;
-                grid-template-columns: 1fr;
-                grid-template-rows: max-content minmax(200px, 75%) max-content;
-                grid-template-areas:
-                    "header"
-                    "map"
-                    "options";
-                width: 100%;
-                max-height: 100%;
-                justify-items: center;
-
-                padding: 1em;
-            }
-
-            #header {
-                position: relative;
-                grid-area: header;
-                bottom: 200px;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: space-between;
-                padding: .6em;
-                background-color: #fff;
-                border-radius: .1em;
-                border: 2px dotted #ccc;
-                max-width: 20%;
-                min-width: fit-content;
-                z-index: 1;
-                gap: .3em;
-            }
-
-            #header.loaded {
-                bottom: -3px;
-                transition: bottom 0.5s ease-in-out;
-                transition-delay: 0.2s;
-            }
-
-            #header-actions {
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                justify-content: space-evenly;
-                width: 100%;
-                gap: .3em;
-            }
-
-            .button {
-                border-radius: .1em;
-                padding: 10px;
-                border: 2px dotted #ccc;
-                flex: 1;
-                text-align: center;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                user-select: none;
-            }
-
-            .button:hover {
-                cursor: pointer;
-                background-color: #eee;
-            }
-
-            #tile-map {
-                display: grid;
-                grid-template-columns: repeat(30, 1fr);
-                grid-template-rows: repeat(30, 1fr);
-                aspect-ratio: 1 / 1; /* Ensures the width and height are equal */
-                overflow: hidden;
-                max-height: 100%;
-                border-radius: 4px;
-                border: 2px dotted #ccc;
-                z-index: 1;
-            }
-
-            #tile-map.active {
-                filter: drop-shadow(0 0 5px #333);
-                cursor: crosshair;
-            }
-
-            .tile {
-                display: block;
-                user-select: none;
-                color: transparent;
-                min-width: 0px;
-                min-height: 0px;
-            }
-
-            .tile:hover {
-                filter: brightness(1.2);
-                color: #999;
-            border: 1px solid #eee;
-            }
-
-            .hght-0 {
-                background-color: #000040; /* Deep ocean blue */
-            }
-            .hght-1 {
-                background-color: #000080; /* Deep ocean blue */
-            }
-            .hght-2 {
-                background-color: #0000CD; /* Darker blue */
-            }
-            .hght-3 {
-                background-color: #1E90FF; /* Ocean blue */
-            }
-            .hght-4 {
-                background-color: #2dc7ff; /* Ocean blue */
-            }
-            .hght-5 {
-                background-color: #02a50d; /* Grassland green */
-            }
-            .hght-6 {
-                background-color: #1d6200; /* Lighter green, representing plains or low hills */
-            }
-            .hght-7 {
-                background-color: #6b4429; /* Dark brown, representing mountains */
-            }
-            .hght-8 {
-                background-color: #838383; /* Light grey for lower mountains */
-            }
-            .hght-9 {
-                background-color: #EEE; /* Snow white, highest peaks */
-            }
-            .hght-10 {
-                background-color: #fff; /* Black, representing water */
-            }
-
-            #mapWrapper {
-                display: flex;
-                position: relative;
-                flex-direction: row;
-                align-items: center;
-                justify-content: center;
-                width: 100%;
-                height: 100%;
-                grid-area: map;
-            }
-
-            #sidebarBlock {
-                width: 20%;
-                height: 100%;
-                overflow: hidden;
-            }
-        `
+		templ_7745c5c3_Var4 := `HTMX Terragen`
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var4)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</style><style type=\"text/css\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</title><script>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		templ_7745c5c3_Var5 := `
-            @media (orientation: landscape) {
-                #grid-wrapper {
-                    display: grid;
-                    grid-template-rows: minmax(200px, 75%) 1fr !important;
-                    grid-template-columns: max-content auto !important;
-                    grid-template-areas: "header header""map options" !important;
-                    background-color: red;
+                /**
+                * @param {Event} e
+                */
+                function ReTrigger(e) {
+                    if ((e.type === "mouseover" || e.type === "click") && e.shiftKey === false && e.ctrlKey === false) {
+                        return
+                    }
+                    var target = e.currentTarget;
+                    if (!(target instanceof HTMLElement)) {
+                        return
+                    }
+                    if (target.nodeName !== "SPAN") {
+                        return
+                    }
+                    var magnitude = 1;
+                    var shapeEvent = new CustomEvent("shape", {
+                        detail: {
+                            magnitude: e.shiftKey ? magnitude : -1 * magnitude,
+                        },
+                    });
+                    target.dispatchEvent(shapeEvent);
                 }
-                #options-group {
-                    flex-direction: column !important;
-                }
-            }
-        `
+                htmx.on("htmx:load", function (e) {
+                    var element = e.detail.elt;
+
+                    // Add event listeners to all 'span.tile' elements within the loaded element
+                    element.querySelectorAll("span.tile").forEach(function (span) {
+                        span.addEventListener("click", ReTrigger);
+                        span.addEventListener("mouseover", ReTrigger);
+                    });
+
+                    // If the loaded element itself is a 'span.tile', add event listeners to it
+                    if (element.matches("span.tile")) {
+                        element.addEventListener("click", ReTrigger);
+                        element.addEventListener("mouseover", ReTrigger);
+                    }
+                });
+                // add control and shift keydown listeners
+                window.addEventListener('keydown', (e) => {
+                    if (e.key === 'Shift') {
+                        document.getElementById('lifting').classList.add('active')
+                        document.getElementById('tile-map').classList.add('active')
+                    }
+                    if (e.key === 'Control') {
+                        document.getElementById('tile-map').classList.add('active')
+                        document.getElementById('lowering').classList.add('active')
+                    }
+                })
+
+                window.addEventListener('keyup', (e) => {
+                    if (e.key === 'Shift') {
+                        document.getElementById('lifting').classList.remove('active')
+                        document.getElementById('tile-map').classList.remove('active')
+                    }
+                    if (e.key === 'Control') {
+                        document.getElementById('lowering').classList.remove('active')
+                        document.getElementById('tile-map').classList.remove('active')
+                    }
+                })
+            `
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var5)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</style><script>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</script></head><body _=\"init add .loaded to me\"><div id=\"main\"><div id=\"grid-wrapper\"><div id=\"header\" _=\"init add .loaded to me\"><h1>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Var6 := `
-            /**
-             * @param {Event} e
-             */
-            function ReTrigger(e) {
-                if ((e.type === "mouseover" || e.type === "click") && e.shiftKey === false && e.ctrlKey === false) {
-                    return
-                }
-                var target = e.currentTarget;
-                if (!(target instanceof HTMLElement)) {
-                    return
-                }
-                if (target.nodeName !== "SPAN") {
-                    return
-                }
-                var magnitude = 1;
-                var shapeEvent = new CustomEvent("shape", {
-                    detail: {
-                        magnitude: e.shiftKey ? magnitude : -1 * magnitude,
-                    },
-                });
-                target.dispatchEvent(shapeEvent);
-            }
-            htmx.on("htmx:load", function (e) {
-                var element = e.detail.elt;
-
-                // Add event listeners to all 'span.tile' elements within the loaded element
-                element.querySelectorAll("span.tile").forEach(function (span) {
-                    span.addEventListener("click", ReTrigger);
-                    span.addEventListener("mouseover", ReTrigger);
-                });
-
-                // If the loaded element itself is a 'span.tile', add event listeners to it
-                if (element.matches("span.tile")) {
-                    element.addEventListener("click", ReTrigger);
-                    element.addEventListener("mouseover", ReTrigger);
-                }
-            });
-            // add control and shift keydown listeners
-            window.addEventListener('keydown', (e) => {
-                if (e.key === 'Shift') {
-                    document.getElementById('lifting').classList.add('active')
-                    document.getElementById('tile-map').classList.add('active')
-                }
-                if (e.key === 'Control') {
-                    document.getElementById('tile-map').classList.add('active')
-                    document.getElementById('lowering').classList.add('active')
-                }
-            })
-
-            window.addEventListener('keyup', (e) => {
-                if (e.key === 'Shift') {
-                    document.getElementById('lifting').classList.remove('active')
-                    document.getElementById('tile-map').classList.remove('active')
-                }
-                if (e.key === 'Control') {
-                    document.getElementById('lowering').classList.remove('active')
-                    document.getElementById('tile-map').classList.remove('active')
-                }
-            })
-        `
+		templ_7745c5c3_Var6 := `HTMX Terragen`
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var6)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</script><title>")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Var7 := `Document`
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var7)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</title></head><body _=\"init add .loaded to me\"><div id=\"main\"><div id=\"grid-wrapper\"><div id=\"header\" _=\"init add .loaded to me\"><h1>")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Var8 := `HTMX Terragen`
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var8)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -340,8 +132,8 @@ func IndexComponent() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Var9 := `New Map`
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var9)
+		templ_7745c5c3_Var7 := `New Map`
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var7)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -349,8 +141,8 @@ func IndexComponent() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Var10 := `Get Last`
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var10)
+		templ_7745c5c3_Var8 := `Get Last`
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var8)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

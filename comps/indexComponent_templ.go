@@ -146,7 +146,7 @@ func IndexComponent() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div></div><div id=\"mapWrapper\" _=\"on htmx:load add .loaded to #options then add .right to #header\"><div id=\"tile-map\" style=\"display:none;\"></div></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div></div><div id=\"mapWrapper\"><div id=\"tile-map\" style=\"display:none;\"></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

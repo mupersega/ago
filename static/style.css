@@ -30,16 +30,17 @@ body.loaded {
 #grid-wrapper {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: max-content minmax(200px, 75%) max-content;
+  grid-template-rows: max-content minmax(200px, 60%) max-content;
   grid-template-areas:
       "header"
       "map"
       "options";
+  align-content: center;
+  justify-items: center;
   width: 100%;
   max-height: 100%;
-  justify-items: center;
-
   padding: 1em;
+  height: 100%;
 }
 
 #header {
@@ -98,14 +99,14 @@ body.loaded {
   grid-template-rows: repeat(30, 1fr);
   aspect-ratio: 1 / 1;
   overflow: hidden;
-  max-height: 100%;
+  height: 100%;
   border-radius: 4px;
   border: 2px dotted #ccc;
   z-index: 1;
 }
 
 #tile-map.active {
-  filter: drop-shadow(0 0 5px #333);
+  filter: drop-shadow(0 0 5px #666);
   cursor: crosshair;
 }
 
@@ -115,12 +116,20 @@ body.loaded {
   color: transparent;
   min-width: 0px;
   min-height: 0px;
+  border: 1px solid transparent;
 }
 
 .tile:hover {
-  filter: brightness(1.2);
-  color: #999;
-border: 1px solid #eee;
+  filter: brightness(1.3);
+  border: 1px solid #ccc;
+}
+
+#tile-map.active > .tile:hover {
+  border: 1px solid rgb(255, 23, 255);
+}
+
+.tile.htmx-request{
+  background-color: rgb(255, 23, 255);
 }
 
 #mapWrapper {
@@ -129,15 +138,141 @@ border: 1px solid #eee;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 100%;
   grid-area: map;
+  opacity: 0;
+  aspect-ratio: 1 / 1;
+  z-index: 1;
+}
+
+#mapWrapper.loaded {
+  opacity: 1;
+  transition: opacity 0.2s ease-in-out;
 }
 
 #sidebarBlock {
   width: 20%;
   height: 100%;
   overflow: hidden;
+}
+
+#options {
+  grid-area: options;
+  position: relative;
+  top: -200;
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  opacity: 0;
+}
+
+#options.loaded {
+  opacity: 1;
+  top: -3px;
+  transition: top 0.5s ease-out;
+  transition-delay: 0.5s;
+}
+
+#options-group {
+  border: 2px dotted #ccc;
+  padding: 0.6em;
+  border-radius: 0.1em;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  pointer-events: all;
+  gap: 0.3em;
+  background-color: #fff;
+}
+
+#mode-indicator {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 0.3em;
+}
+
+.mode {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+}
+
+#lifting {
+  border-radius: 4px 4px 0 0;
+  color: #02a50d;
+}
+
+#lifting.active {
+  background-color: #02a50d;
+  border: 1px solid #1d6200;
+  color: #fff;
+  transform-origin: bottom;
+}
+
+#lowering {
+  color: #2dc7ff;
+  border-radius: 0 0 4px 4px;
+}
+
+#lowering.active {
+  background-color: #2dc7ff;
+  border: 1px solid #1E90FF;
+  color: #fff;
+  transform-origin: top;
+}
+
+#height-controls {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.3em;
+}
+
+.mode.active {
+  filter: drop-shadow(0 2px 5px #666);
+  transition: transform 0.1s ease-in;
+  transform: scaleY(1.1);
+}
+
+.mode {
+  width: 100%;
+  height: 2em;
+  text-align: center;
+  color: #aaa;
+}
+
+#magnitude-selector {
+  display: grid;
+  grid-auto-flow: column;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 0.3em;
+  overflow: hidden;
+}
+
+.magnitude-option {
+  display: block;
+  height: 1em;
+  width: 1em;
+  color: transparent;
+}
+
+.magnitude-option:hover {
+  filter: brightness(1.2);
+  border: 1px solid #eee;
+}
+
+.break {
+  border-right: 1px solid #eee;
+  height: 95%;
 }
 
 .hght-0 {

@@ -3,16 +3,40 @@ package main
 import (
 	"ago/comps"
 	"ago/helper"
+	"embed"
+	"flag"
 	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 
 	"github.com/a-h/templ"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/joho/godotenv"
 )
 
+//go:embed static
+var StaticFS embed.FS
+
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
+	FlagPort := flag.Int("port", 0, "Port to listen on.")
+	flag.Parse()
+
+	host := ""
+
+	if *FlagPort == 0 {
+		host = "172.105.161.248:80"
+	} else {
+		host = "localhost:" + strconv.Itoa(*FlagPort)
+	}
+
+	// hostIP := "172.105.161.248:" + strconv.Itoa(port)
 	store := NewStore()
 
 	r := chi.NewRouter()
@@ -22,7 +46,9 @@ func main() {
 		templ.Handler(comps.IndexComponent()).ServeHTTP(w, r)
 	})
 
-	r.Handle("/static/*", http.StripPrefix("/static", http.FileServer(http.Dir("static"))))
+	// vv this is the old way of doing it with http route vv
+	// r.Handle("/static/*", http.StripPrefix("/static", http.FileServer(http.Dir("static"))))
+	r.Handle("/static/*", http.FileServer(http.FS(StaticFS)))
 
 	r.Get("/new", func(w http.ResponseWriter, r *http.Request) {
 		tm := comps.NewTileMap(10, 30, 30)
@@ -110,7 +136,10 @@ func main() {
 		}
 	})
 
-	http.ListenAndServe("127.0.0.1:3000", r)
+	// announce server
+	fmt.Println("Server running on " + host)
+	http.ListenAndServe(host, r)
+
 }
 
 func deduceXYFromId(id int, tileMap comps.TileMap) (x, y int, err error) {

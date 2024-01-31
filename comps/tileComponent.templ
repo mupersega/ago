@@ -11,8 +11,9 @@ templ TileComponent(tile Tile) {
 		hx-post={ "/shape/" + helper.Itoa(tile.Id) }
 		hx-vals="js:{magnitude: event.detail.magnitude}"
 		hx-swap="outerHTML"
-		class={ "tile", "hght", GetHgtClass(tile.Altitude) }
+		class={ "tile", GetHgtClass(tile.Altitude) }
 		hx-target="this"
-	>{helper.Itoa(tile.Altitude)}
-	<span class="htmx-indicator" style="color: bisque">*</span></span>
+	>
+	// {helper.Itoa(tile.Altitude)}
+	</span>
 }

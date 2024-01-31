@@ -85,7 +85,7 @@ templ IndexComponent() {
 							<div class="button" hx-get="/display" hx-target="#tile-map" hx-swap="outerHTML">Get Last</div>
 						</div>
 					</div>
-					<div id="mapWrapper" _="on htmx:load add .loaded to #options then add .right to #header">
+					<div id="mapWrapper">
 						<div id="tile-map" style="display:none;"></div>
 					</div>
 					@OptionsComponent()

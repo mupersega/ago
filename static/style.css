@@ -76,6 +76,10 @@ body.loaded {
   gap: .3em;
 }
 
+#header-actions > .button {
+ flex-wrap: nowrap;
+}
+
 .button {
   border-radius: .1em;
   padding: 10px;
@@ -142,6 +146,7 @@ body.loaded {
   opacity: 0;
   aspect-ratio: 1 / 1;
   z-index: 1;
+  height: 100%;
 }
 
 #mapWrapper.loaded {
@@ -255,7 +260,14 @@ body.loaded {
   cursor: pointer;
   border: 1px solid #ccc;
   border-radius: 0.3em;
-  overflow: hidden;
+}
+
+#magnitude-selector :nth-child(1) {
+  border-radius: 0.3em 0 0 0.3em;
+}
+
+#magnitude-selector :last-child {
+  border-radius: 0 0.3em 0.3em 0;
 }
 
 .magnitude-option {
@@ -263,11 +275,26 @@ body.loaded {
   height: 1em;
   width: 1em;
   color: transparent;
+  user-select: none;
+}
+
+.mag-selected {
+  transform: scale(1.5);
+  border: 1px solid rgb(255, 23, 255);
+  border-radius: 0.3em !important;
+  z-index: 1;
+  transition-duration: 0.1s ease-in;
+}
+
+.mag-selected.active {
+  filter: drop-shadow(0 2px 5px #666);
+  transition: transform 0.1s ease-in;
+  transform: scale(2)
 }
 
 .magnitude-option:hover {
   filter: brightness(1.2);
-  border: 1px solid #eee;
+  border: 1px solid rgb(255, 23, 255);
 }
 
 .break {

@@ -14,7 +14,7 @@ templ IndexComponent() {
 			<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
             <link rel="stylesheet" href="/static/style.css"/>
             <link rel="stylesheet" href="/static/media.css"/>
-            <title>HTMX Terragen</title>
+            <title>HTMX Terra</title>
             <script>
                 /**
                 * @param {Event} e
@@ -31,9 +31,11 @@ templ IndexComponent() {
                         return
                     }
                     var magnitude = 1;
+                    var pmag = window.$pMag || -1;
                     var shapeEvent = new CustomEvent("shape", {
                         detail: {
                             magnitude: e.shiftKey ? magnitude : -1 * magnitude,
+                            prescribedMagnitude: pmag,
                         },
                     });
                     target.dispatchEvent(shapeEvent);
@@ -55,13 +57,22 @@ templ IndexComponent() {
                 });
                 // add control and shift keydown listeners
                 window.addEventListener('keydown', (e) => {
+                    var pmag = window.$pMag || -1;
                     if (e.key === 'Shift') {
-                        document.getElementById('lifting').classList.add('active')
-                        document.getElementById('tile-map').classList.add('active')
+                        if (pmag === -1) {                            
+                            document.getElementById('lifting').classList.add('active')
+                            document.getElementById('tile-map').classList.add('active')
+                        } else {
+                            document.querySelector('.mag-selected').classList.add('active')
+                        }
                     }
                     if (e.key === 'Control') {
-                        document.getElementById('tile-map').classList.add('active')
-                        document.getElementById('lowering').classList.add('active')
+                        if (pmag === -1) {
+                            document.getElementById('tile-map').classList.add('active')
+                            document.getElementById('lowering').classList.add('active')
+                        } else {
+                            document.querySelector('.mag-selected').classList.add('active')
+                        }
                     }
                 })
 
@@ -69,10 +80,12 @@ templ IndexComponent() {
                     if (e.key === 'Shift') {
                         document.getElementById('lifting').classList.remove('active')
                         document.getElementById('tile-map').classList.remove('active')
+                        document.querySelector('.mag-selected').classList.remove('active')
                     }
                     if (e.key === 'Control') {
                         document.getElementById('lowering').classList.remove('active')
                         document.getElementById('tile-map').classList.remove('active')
+                        document.querySelector('.mag-selected').classList.remove('active')
                     }
                 })
             </script>
@@ -81,7 +94,7 @@ templ IndexComponent() {
 			<div id="main">
 				<div id="grid-wrapper">
 					<div id="header" _="init add .loaded to me">
-						<h1>HTMX Terragen</h1>
+						<h1>HTMX terra</h1>
 						<div id="header-actions">
 							<div class="button" hx-get="/new" hx-target="#tile-map" hx-swap="outerHTML" hx-trigger="click">New Map</div>
 							<div class="button" hx-get="/display" hx-target="#tile-map" hx-swap="outerHTML">Get Last</div>

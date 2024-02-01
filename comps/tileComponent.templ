@@ -9,7 +9,7 @@ templ TileComponent(tile Tile) {
 		hx-trigger="shape"
 		id={ helper.Itoa(tile.Id) }
 		hx-post={ "/shape/" + helper.Itoa(tile.Id) }
-		hx-vals="js:{magnitude: event.detail.magnitude}"
+		hx-vals="js:{magnitude: event.detail.magnitude, prescribedMagnitude: event.detail.prescribedMagnitude}"
 		hx-swap="outerHTML"
 		class={ "tile", GetHgtClass(tile.Altitude) }
 		hx-target="this"

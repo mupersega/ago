@@ -45,7 +45,7 @@ func IndexComponent() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Var4 := `HTMX Terragen`
+		templ_7745c5c3_Var4 := `HTMX Terra`
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var4)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -70,9 +70,11 @@ func IndexComponent() templ.Component {
                         return
                     }
                     var magnitude = 1;
+                    var pmag = window.$pMag || -1;
                     var shapeEvent = new CustomEvent("shape", {
                         detail: {
                             magnitude: e.shiftKey ? magnitude : -1 * magnitude,
+                            prescribedMagnitude: pmag,
                         },
                     });
                     target.dispatchEvent(shapeEvent);
@@ -94,13 +96,22 @@ func IndexComponent() templ.Component {
                 });
                 // add control and shift keydown listeners
                 window.addEventListener('keydown', (e) => {
+                    var pmag = window.$pMag || -1;
                     if (e.key === 'Shift') {
-                        document.getElementById('lifting').classList.add('active')
-                        document.getElementById('tile-map').classList.add('active')
+                        if (pmag === -1) {                            
+                            document.getElementById('lifting').classList.add('active')
+                            document.getElementById('tile-map').classList.add('active')
+                        } else {
+                            document.querySelector('.mag-selected').classList.add('active')
+                        }
                     }
                     if (e.key === 'Control') {
-                        document.getElementById('tile-map').classList.add('active')
-                        document.getElementById('lowering').classList.add('active')
+                        if (pmag === -1) {
+                            document.getElementById('tile-map').classList.add('active')
+                            document.getElementById('lowering').classList.add('active')
+                        } else {
+                            document.querySelector('.mag-selected').classList.add('active')
+                        }
                     }
                 })
 
@@ -108,10 +119,12 @@ func IndexComponent() templ.Component {
                     if (e.key === 'Shift') {
                         document.getElementById('lifting').classList.remove('active')
                         document.getElementById('tile-map').classList.remove('active')
+                        document.querySelector('.mag-selected').classList.remove('active')
                     }
                     if (e.key === 'Control') {
                         document.getElementById('lowering').classList.remove('active')
                         document.getElementById('tile-map').classList.remove('active')
+                        document.querySelector('.mag-selected').classList.remove('active')
                     }
                 })
             `
@@ -123,7 +136,7 @@ func IndexComponent() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Var6 := `HTMX Terragen`
+		templ_7745c5c3_Var6 := `HTMX terra`
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var6)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err

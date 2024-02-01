@@ -31,7 +31,7 @@ func main() {
 	host := ""
 
 	if *FlagPort == 0 {
-		host = "172.105.161.248:80"
+		host = "172.105.161.248:443"
 	} else {
 		host = "localhost:" + strconv.Itoa(*FlagPort)
 	}
@@ -74,11 +74,12 @@ func main() {
 		}
 		r.ParseForm()
 		magnitude := r.Form.Get("magnitude")
+		prescribedMagnitude := r.Form.Get("prescribedMagnitude")
 		if err != nil {
 			panic(err)
 		}
 		println("magnitude:", magnitude)
-		// println("id:", id)
+		println("prescribedMagnitude:", prescribedMagnitude)
 		// get user
 		user := store.GetUser(helper.GetIpFromRequest(r))
 		// get tilemap
@@ -90,9 +91,13 @@ func main() {
 			panic(err)
 		}
 		// get altitude from tilemap
-		altInt := tm.AltAt(x, y)
-		// increment altitude
-		altInt += helper.Atoi(magnitude)
+		altInt := 0
+		if prescribedMagnitude != "undefined" && helper.Atoi(prescribedMagnitude) != -1 {
+			altInt = helper.Atoi(prescribedMagnitude)
+		} else {
+			altInt = tm.AltAt(x, y) + helper.Atoi(magnitude)
+		}
+		// checks
 		if altInt > tm.MaxAltitude {
 			altInt = tm.MaxAltitude
 		}
@@ -138,7 +143,14 @@ func main() {
 
 	// announce server
 	fmt.Println("Server running on " + host)
-	http.ListenAndServe(host, r)
+	if *FlagPort == 0 {
+		http.ListenAndServeTLS(":443", "cert.pem", "privkey.pem", r)
+		http.ListenAndServe(":80", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			http.Redirect(w, r, "https://"+r.Host+r.URL.String(), http.StatusMovedPermanently)
+		}))
+	} else {
+		http.ListenAndServe(host, r)
+	}
 
 }
 

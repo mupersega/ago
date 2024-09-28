@@ -6,10 +6,8 @@ templ IndexComponent() {
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 			<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet"/>
-			// <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
-			// <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
-            <script src="/static/libs/htmx.min.js"></script>
-            <script src="/static/libs/hyperscript.min.js"></script>
+			<script src="https://unpkg.com/htmx.org@2.0.2" integrity="sha384-Y7hw+L/jvKeWIRRkqWYfPcvVxHzVzn5REgzbawhxAuQGwX1XWe70vji+VSeHOThJ" crossorigin="anonymous"></script>
+            <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
 			<link rel="preconnect" href="https://fonts.googleapis.com"/>
 			<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
             <link rel="stylesheet" href="/static/style.css"/>
@@ -40,6 +38,17 @@ templ IndexComponent() {
                     });
                     target.dispatchEvent(shapeEvent);
                 }
+                htmx.on("htmx:afterSwap", function (e) {
+                    console.log("htmx:afterSwap", e);
+                    if (e.detail.target.id === "tile-map") {
+                        const elt = document.getElementById("mapWrapper");
+                        // make visible after timeout
+                        setTimeout(() => {
+                            elt.style.opacity = 1;
+                            elt.classList.add("loaded");
+                        }, 400);
+                    }
+                });
                 htmx.on("htmx:load", function (e) {
                     var element = e.detail.elt;
 
@@ -63,7 +72,10 @@ templ IndexComponent() {
                             document.getElementById('lifting').classList.add('active')
                             document.getElementById('tile-map').classList.add('active')
                         } else {
-                            document.querySelector('.mag-selected').classList.add('active')
+                            const magSelected = document.querySelector('.mag-selected')
+                            if (magSelected) {
+                                magSelected.classList.add('active')
+                            }
                         }
                     }
                     if (e.key === 'Control') {
@@ -71,7 +83,10 @@ templ IndexComponent() {
                             document.getElementById('tile-map').classList.add('active')
                             document.getElementById('lowering').classList.add('active')
                         } else {
-                            document.querySelector('.mag-selected').classList.add('active')
+                            const magSelected = document.querySelector('.mag-selected')
+                            if (magSelected) {
+                                magSelected.classList.add('active')
+                            }
                         }
                     }
                 })
@@ -80,12 +95,18 @@ templ IndexComponent() {
                     if (e.key === 'Shift') {
                         document.getElementById('lifting').classList.remove('active')
                         document.getElementById('tile-map').classList.remove('active')
-                        document.querySelector('.mag-selected').classList.remove('active')
+                        const magSelected = document.querySelector('.mag-selected')
+                        if (magSelected) {
+                            magSelected.classList.remove('active')
+                        }
                     }
                     if (e.key === 'Control') {
                         document.getElementById('lowering').classList.remove('active')
                         document.getElementById('tile-map').classList.remove('active')
-                        document.querySelector('.mag-selected').classList.remove('active')
+                        const magSelected = document.querySelector('.mag-selected')
+                        if (magSelected) {
+                            magSelected.classList.remove('active')
+                        }
                     }
                 })
             </script>
@@ -96,12 +117,38 @@ templ IndexComponent() {
 					<div id="header" _="init add .loaded to me">
 						<h1>HTMX terra</h1>
 						<div id="header-actions">
-							<div class="button" hx-get="/new" hx-target="#tile-map" hx-swap="outerHTML" hx-trigger="click">New Map</div>
-							<div class="button" hx-get="/display" hx-target="#tile-map" hx-swap="outerHTML">Get Last</div>
+							<div class="option-wrapper">
+                                <p class="button"
+                                    hx-post="/new"
+                                    hx-target="#tile-map"
+                                    hx-swap="outerHTML"
+                                    hx-trigger="click"
+                                    hx-include="#size-form"
+                                    _="on load wait 1s
+                                        then add .pulse-border-once to me
+                                        on htmx:beforeRequest remove .loaded from #mapWrapper">
+                                    >New Map</p>
+                                <form id="size-form" name="size-form" class="size-form"
+                                    _="on change remove .active-label from my children
+                                        then add .active-label to target.nextElementSibling
+                                        then remove .pulse-border-once from previous .button
+                                        then wait 0.1s
+                                        then add .pulse-border-once to previous .button">
+                                    <input class="hidden-radio" type="radio" id="small-select" name="size" value="s" checked>
+                                    <label for="small-select" class="active-label">s</label>
+                                    <input class="hidden-radio" type="radio" id="medium-select" name="size" value="m">
+                                    <label for="medium-select">m</label>
+                                    <input class="hidden-radio" type="radio" id="large-select" name="size" value="l">
+                                    <label for="large-select">l</label>
+                                </form>
+                            </div>
+                            <div class="option-wrapper">
+							    <div class="button" hx-get="/display" hx-target="#tile-map" hx-swap="outerHTML">Get Last</div>
+                            </div>
 						</div>
 					</div>
 					<div id="mapWrapper">
-						<div id="tile-map" style="display:none;"></div>
+						<div id="tile-map"></div>
 					</div>
 					@OptionsComponent()
 				</div>

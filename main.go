@@ -14,6 +14,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/joho/godotenv"
+	"github.com/mavolin/go-htmx"
 )
 
 //go:embed static
@@ -36,7 +37,6 @@ func main() {
 		host = "localhost:" + strconv.Itoa(*FlagPort)
 	}
 
-	// hostIP := "172.105.161.248:" + strconv.Itoa(port)
 	store := NewStore()
 
 	r := chi.NewRouter()
@@ -46,12 +46,28 @@ func main() {
 		templ.Handler(comps.IndexComponent()).ServeHTTP(w, r)
 	})
 
-	// vv this is the old way of doing it with http route vv
-	// r.Handle("/static/*", http.StripPrefix("/static", http.FileServer(http.Dir("static"))))
 	r.Handle("/static/*", http.FileServer(http.FS(StaticFS)))
 
-	r.Get("/new", func(w http.ResponseWriter, r *http.Request) {
-		tm := comps.NewTileMap(10, 30, 30)
+	r.Post("/new", func(w http.ResponseWriter, r *http.Request) {
+		err := r.ParseForm()
+		if err != nil {
+			htmx.Reswap(r, htmx.SwapNone)
+			w.WriteHeader(http.StatusBadRequest)
+		}
+		formSize := r.Form.Get("size")
+		var size int
+		switch formSize {
+		case "s":
+			size = 30
+		case "m":
+			size = 50
+		case "l":
+			size = 70
+		default:
+			size = 30
+		}
+
+		tm := comps.NewTileMap(10, size, size)
 
 		user := store.GetUser(helper.GetIpFromRequest(r))
 		store.SetTileMap(user.IP, tm)

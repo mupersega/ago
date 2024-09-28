@@ -1,6 +1,8 @@
 package comps
 
-import "math/rand"
+import (
+	"math/rand"
+)
 
 type TileMap struct {
 	MaxAltitude int
@@ -38,6 +40,19 @@ func NewTileMap(maxAltitude, width, height int) TileMap {
 	tm.SeedData = tm.Smooth(1)
 	tm.Tiles = tm.GenerateTiles()
 	return tm
+}
+
+func (tm TileMap) Class() string {
+	switch {
+	case tm.Width == 30:
+		return "small"
+	case tm.Width == 50:
+		return "medium"
+	case tm.Width == 70:
+		return "large"
+	default:
+		return "unknown"
+	}
 }
 
 func (tm TileMap) AltAt(x, y int) int {

@@ -2,6 +2,7 @@ package main
 
 import (
 	"ago/comps"
+	"fmt"
 	"net/http"
 )
 
@@ -10,7 +11,7 @@ type Store struct {
 }
 
 type UserStore struct {
-	IP           string
+	Id           string
 	KV           map[string]string
 	TileMap      comps.TileMap
 	EditedPoints []comps.Coord
@@ -22,14 +23,16 @@ func NewStore() Store {
 	}
 }
 
-func (s *Store) GetUser(ip string) UserStore {
-	if _, ok := s.Users[ip]; !ok {
-		s.Users[ip] = UserStore{
-			IP: ip,
+func (s *Store) GetUser(id string) UserStore {
+	if _, ok := s.Users[id]; !ok {
+		fmt.Println("Creating new user with ip: " + id)
+		s.Users[id] = UserStore{
+			Id: id,
 			KV: make(map[string]string),
 		}
 	}
-	return s.Users[ip]
+	userStore := s.Users[id]
+	return userStore
 }
 
 func (s *Store) SetUser(ip string, user UserStore) {
@@ -46,6 +49,11 @@ func (s *Store) SetTileMap(ip string, tm comps.TileMap) {
 	s.SetUser(ip, user)
 }
 
+func (us UserStore) SetTileMap(tm comps.TileMap) UserStore {
+	us.TileMap = tm
+	return us
+}
+
 func (s *Store) SetKV(ip, key, value string) {
 	user := s.GetUser(ip)
 	user.KV[key] = value
@@ -58,7 +66,7 @@ func (s *Store) GetIP(r *http.Request) string {
 
 func (s *Store) DisplayStore() {
 	for _, user := range s.Users {
-		println("ip: " + user.IP)
+		println("ip: " + user.Id)
 		for key, value := range user.KV {
 			println(key + " : " + value)
 		}

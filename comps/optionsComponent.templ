@@ -1,9 +1,8 @@
 package comps
 
 templ OptionsComponent() {
-    <div id="options">
-        <div id="options-group">
-        <div id="height-controls">
+    <div id="options" class="options">
+        <div class="height-controls options-group">
             <div id="mode-indicator">
                 <div id="lowering" class="mode" _="on mouseenter put 'ctrl+<br>click|hover' into me end on mouseleave put 'lower ▼' into me">
                     lower ▼</div>
@@ -25,6 +24,7 @@ templ OptionsComponent() {
                 <div class="magnitude-option hght-10" _="on click if I match .mag-selected then toggle .mag-selected then set $pMag to -1 else take .mag-selected then set $pMag to '10' end">_</div>
             </div>         
         </div>
+        <div class="options-actions options-group">
             <div id="smooth-all"  class="button" hx-trigger="click" hx-get="/smooth" hx-target="#tile-map" hx-swap="outerHTML">smooth all</div>    
             <div id="smooth-edited" class="button" hx-trigger="click" hx-get="/smoothedited" hx-target="#tile-map" hx-swap="outerHTML">smooth edited</div>
         </div>

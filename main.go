@@ -43,19 +43,6 @@ func main() {
 
 	r.Post("/new", func(w http.ResponseWriter, r *http.Request) {
 		err := r.ParseForm()
-		// expected form values
-		// size: l
-		// PostSmoothDistance: 1
-		// InitialAltitude: 0
-		// Mountains: 5
-		// MountainAltitude: 10
-		// MountainAltitudeWindow: 2
-		// MountainRadius: 3
-		// MountainRadiusWindow: 2
-		// MountainRanges: 0
-		// MountainRangeSize: 1
-		// RangeSpread: 5
-		// DefaultRunners: 10
 		if err != nil {
 			htmx.Reswap(r, htmx.SwapNone)
 			w.WriteHeader(http.StatusBadRequest)

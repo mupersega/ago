@@ -49,7 +49,7 @@ func TileMapComponent(tileMap TileMap) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" _=\"on load wait 0.2s\n\t\t\tthen add .loaded to #options\n\t\t\tthen add .loaded to #header\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" _=\"on load call window.SetTileMapSize()\n\t\t\tthen wait 0.2s\n\t\t\tthen add .loaded to #options\n\t\t\tthen add .loaded to #header\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

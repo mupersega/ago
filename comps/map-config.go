@@ -46,6 +46,40 @@ func IslandsConfig() MapConfig {
 	}
 }
 
+// size: l
+// PostSmoothDistance: 2
+// InitialAltitude: 4
+// Mountains: 0
+// MountainAltitude: 10
+// MountainAltitudeWindow: 4
+// MountainRadius: 5
+// MountainRadiusWindow: 4
+// MountainRanges: 10
+// MountainRangeSize: 10
+// RangeSpread: 30
+// DefaultRunners: 20
+// DefaultRunnerMinlength: 5
+// DefaultRunnerMaxlength: 10
+func CanyonsConfig() MapConfig {
+	return MapConfig{
+		SelectiveDistance:      5,
+		WidthModifier:          1,
+		PostSmoothDistance:     2,
+		InitialAltitude:        Mountain,
+		Mountains:              0,
+		MountainAltitude:       10,
+		MountainAltitudeWindow: 4,
+		MountainRadius:         5,
+		MountainRadiusWindow:   4,
+		MountainRanges:         10,
+		MountainRangeSize:      10,
+		RangeSpread:            30,
+		DefaultRunners:         20,
+		DefaultRunnerMinlength: 5,
+		DefaultRunnerMaxlength: 10,
+	}
+}
+
 func DefaultConfig() MapConfig {
 	return MapConfig{
 		SelectiveDistance:      5,

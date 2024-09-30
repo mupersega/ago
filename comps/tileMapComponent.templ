@@ -5,7 +5,8 @@ import h "ago/helper"
 templ TileMapComponent(tileMap TileMap) {
 	<div id="tile-map"
 		class={ tileMap.Class() } 
-		_="on load wait 0.2s
+		_="on load call window.SetTileMapSize()
+			then wait 0.2s
 			then add .loaded to #options
 			then add .loaded to #header"
 		>

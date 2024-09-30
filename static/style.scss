@@ -1,0 +1,488 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  font-size: 2em;
+  text-align: center;  
+}
+
+body {
+  font-family: 'VT323', monospace;
+  font-size: 20px;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  opacity: 0;
+}
+
+body.loaded {
+  opacity: 1;
+  transition: opacity 0.2s ease-in-out;
+}
+
+#main {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#grid-wrapper {
+  display: grid;
+  grid-template-columns: max-content auto;
+  grid-template-rows: 1fr auto;
+  grid-template-areas:
+      "config map"
+      "open options";
+  align-content: center;
+  justify-items: center;
+  height: 100%;
+  max-height: 100vh;
+  width: 100vw;
+  max-width: 100vw;
+  padding: 0.6em;
+  gap: 0.3em;
+}
+
+#header {
+  position: relative;
+  grid-area: config;
+  bottom: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: .6em;
+  background-color: #fff;
+  border-radius: .1em;
+  border: 2px dotted #ccc;
+  border-radius: 0.3em;
+  max-width: 20%;
+  min-width: fit-content;
+  z-index: 1;
+  gap: .3em;
+  align-self: center;
+  overflow: hidden;
+  max-height: 100%;
+}
+
+#header.loaded {
+  bottom: -3px;
+  transition: bottom 0.5s ease-in-out;
+  transition-delay: 0.2s;
+}
+
+#header-actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 100%;
+  gap: .3em;
+  flex: 1;
+}
+
+#header-actions > .button {
+ flex-wrap: nowrap;
+}
+
+.option-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  .button {
+    min-width: 90px;
+  }
+}
+
+// address this hitting many fings
+.button {
+  border-radius: .1em;
+  padding: 10px;
+  border: 2px dotted #ccc;
+  border-radius: 0.3em;
+  flex: 1;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+.size-form {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  border: 1px dashed #ccc;
+  width: 80px;
+  height: 25px;
+}
+
+.size-form label {
+  padding: 0.3em;
+  font-size: smaller;
+  border-right: 1px solid #ccc;
+  cursor: pointer;
+  user-select: none;
+  flex: 1;
+  text-align: center;
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.size-form label:last-child {
+  border-right: none;
+}
+
+.pulse-border-once {
+  animation: pulse 0.5s ease-in-out;
+}
+
+@keyframes pulse {
+  0% {
+    border-color: #ccc;
+  }
+  50% {
+    border-color: rgb(255, 23, 255);
+  }
+  100% {
+    border-color: #ccc;
+  }
+}
+
+.button:hover {
+  cursor: pointer;
+  background-color: #eee;
+}
+
+#tile-map {
+  display: grid;
+  border-radius: 0.3em;
+  border: 2px dotted #ccc;
+  z-index: 1;
+  min-width: 1px;
+  min-height: 1px;
+  overflow: hidden;
+}
+
+#tile-map.small {
+  grid-template-columns: repeat(30, 1fr);
+  grid-template-rows: repeat(30, 1fr);
+}
+
+#tile-map.medium {
+  grid-template-columns: repeat(50, 1fr);
+  grid-template-rows: repeat(50, 1fr);
+}
+
+#tile-map.large {
+  grid-template-columns: repeat(70, 1fr);
+  grid-template-rows: repeat(70, 1fr);
+}
+
+#tile-map.active {
+  filter: drop-shadow(0 0 5px #666);
+  cursor: crosshair;
+}
+
+.hidden-radio {
+  display: none;
+}
+
+.active-label {
+  background-color: rgb(255, 23, 255);
+  color: white;
+}
+
+.map-loader {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  background-color: #2dc7ff;
+}
+
+.tile {
+  display: block;
+  user-select: none;
+  color: transparent;
+  min-width: 0px;
+  min-height: 0px;
+  border: 1px solid transparent;
+}
+
+.tile:hover {
+  filter: brightness(1.3);
+  border: 1px solid #ccc;
+}
+
+#tile-map.active > .tile:hover {
+  border: 1px solid rgb(255, 23, 255);
+}
+
+.tile.htmx-request{
+  background-color: rgb(255, 23, 255);
+}
+
+#mapWrapper {
+  display: flex;
+  position: relative;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  grid-area: map;
+  opacity: 0;
+  z-index: 1;
+  height: 100%;
+  width: 100%;
+}
+
+#mapWrapper.loaded {
+  opacity: 1;
+  transition: opacity 0.2s ease-in-out;
+}
+
+#sidebarBlock {
+  width: 20%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.options {
+  grid-area: options;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.3em;
+  opacity: 0;
+  transform: translateY(-100%);
+}
+
+.options.loaded {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+}
+
+#mode-indicator {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 0.3em;
+}
+
+.mode {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+}
+
+#lifting {
+  border-radius: 4px 4px 0 0;
+  color: #02a50d;
+}
+
+#lifting.active {
+  background-color: #02a50d;
+  border: 1px solid #1d6200;
+  color: #fff;
+  transform-origin: bottom;
+}
+
+#lowering {
+  color: #2dc7ff;
+  border-radius: 0 0 4px 4px;
+}
+
+#lowering.active {
+  background-color: #2dc7ff;
+  border: 1px solid #1E90FF;
+  color: #fff;
+  transform-origin: top;
+}
+
+.options-group {
+  width: 250px;
+  height: 100px;
+  padding:0.6em;
+  border: 2px dotted #ccc;
+  border-radius: 0.3em;
+}
+
+.height-controls {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.3em;
+  padding: 0.6em;
+}
+
+.options-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  gap: 0.3em;
+  .button {
+    border: 2px dotted #ccc;
+    border-radius: 0.3em;
+  }
+}
+
+.mode.active {
+  filter: drop-shadow(0 2px 5px #666);
+  transition: transform 0.1s ease-in;
+  transform: scaleY(1.1);
+}
+
+.mode {
+  width: 100%;
+  height: 2em;
+  text-align: center;
+  color: #aaa;
+}
+
+#magnitude-selector {
+  display: grid;
+  grid-auto-flow: column;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 0.3em;
+}
+
+#magnitude-selector :nth-child(1) {
+  border-radius: 0.3em 0 0 0.3em;
+}
+
+#magnitude-selector :last-child {
+  border-radius: 0 0.3em 0.3em 0;
+}
+
+.magnitude-option {
+  display: block;
+  height: 1em;
+  width: 1em;
+  color: transparent;
+  user-select: none;
+}
+
+.mag-selected {
+  transform: scale(1.5);
+  border: 1px solid rgb(255, 23, 255);
+  border-radius: 0.3em !important;
+  z-index: 1;
+  transition-duration: 0.1s ease-in;
+}
+
+.mag-selected.active {
+  filter: drop-shadow(0 2px 5px #666);
+  transition: transform 0.1s ease-in;
+  transform: scale(2)
+}
+
+.magnitude-option:hover {
+  filter: brightness(1.2);
+  border: 1px solid rgb(255, 23, 255);
+}
+
+.break {
+  border-right: 1px solid #eee;
+  height: 95%;
+}
+
+.hght-0 {
+  background-color: #000040; /* Deep ocean blue */
+}
+.hght-1 {
+  background-color: #000080; /* Deep ocean blue */
+}
+.hght-2 {
+  background-color: #0000CD; /* Darker blue */
+}
+.hght-3 {
+  background-color: #1E90FF; /* Ocean blue */
+}
+.hght-4 {
+  background-color: #2dc7ff; /* Ocean blue */
+}
+.hght-5 {
+  background-color: #02a50d; /* Grassland green */
+}
+.hght-6 {
+  background-color: #1d6200; /* Lighter green, representing plains or low hills */
+}
+.hght-7 {
+  background-color: #6b4429; /* Dark brown, representing mountains */
+}
+.hght-8 {
+  background-color: #838383; /* Light grey for lower mountains */
+}
+.hght-9 {
+  background-color: #EEE; /* Snow white, highest peaks */
+}
+.hght-10 {
+  background-color: #fff; /* Black, representing water */
+}
+
+.config-form {
+  grid-area: config;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1em;
+  border: 2px dotted #ccc;
+  border-radius: 0.3em;
+  padding: 0.6em;
+  height: fit-content;
+  align-self: center;
+  overflow-y: auto;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.form-field label {
+  font-size: smaller;
+  padding: 0 0.4em;
+  cursor: pointer;
+  user-select: none;
+}
+
+.form-field input {
+  border: 1px dashed #ccc;
+  padding: 0.3em;
+  text-align: center;
+  width: 80px;
+}
+
+.form-field select {
+  border: 1px dashed #ccc;
+  padding: 0.3em;
+  text-align: center;
+  width: 110px;
+}

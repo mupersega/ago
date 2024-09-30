@@ -9,112 +9,13 @@ templ IndexComponent() {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
-    <script src="https://unpkg.com/htmx.org@2.0.2"
-        integrity="sha384-Y7hw+L/jvKeWIRRkqWYfPcvVxHzVzn5REgzbawhxAuQGwX1XWe70vji+VSeHOThJ"
-        crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="/static/style.css" />
-    <link rel="stylesheet" href="/static/media.css" />
+    // <link rel="stylesheet" href="/static/style.css" />
+    <!-- if development -->
+    <script type="module" src="http://localhost:5173/@vite/client"></script>
+    <script type="module" src="http://localhost:5173/static/main.ts"></script>
     <title>HTMX Terra</title>
-    <script>
-        /**
-        * @param {Event} e
-        */
-        function ReTrigger(e) {
-            if ((e.type === "mouseover" || e.type === "click") && e.shiftKey === false && e.ctrlKey === false) {
-                return
-            }
-            var target = e.currentTarget;
-            if (!(target instanceof HTMLElement)) {
-                return
-            }
-            if (target.nodeName !== "SPAN") {
-                return
-            }
-            var magnitude = 1;
-            var pmag = window.$pMag || -1;
-            var shapeEvent = new CustomEvent("shape", {
-                detail: {
-                    magnitude: e.shiftKey ? magnitude : -1 * magnitude,
-                    prescribedMagnitude: pmag,
-                },
-            });
-            target.dispatchEvent(shapeEvent);
-        }
-        htmx.on("htmx:afterSwap", function (e) {
-            console.log("htmx:afterSwap", e);
-            if (e.detail.target.id === "tile-map") {
-                const elt = document.getElementById("mapWrapper");
-                // make visible after timeout
-                setTimeout(() => {
-                    elt.style.opacity = 1;
-                    elt.classList.add("loaded");
-                }, 400);
-            }
-        });
-        htmx.on("htmx:load", function (e) {
-            var element = e.detail.elt;
-
-            // Add event listeners to all 'span.tile' elements within the loaded element
-            element.querySelectorAll("span.tile").forEach(function (span) {
-                span.addEventListener("click", ReTrigger);
-                span.addEventListener("mouseover", ReTrigger);
-            });
-
-            // If the loaded element itself is a 'span.tile', add event listeners to it
-            if (element.matches("span.tile")) {
-                element.addEventListener("click", ReTrigger);
-                element.addEventListener("mouseover", ReTrigger);
-            }
-        });
-        // add control and shift keydown listeners
-        window.addEventListener('keydown', (e) => {
-            var pmag = window.$pMag || -1;
-            if (e.key === 'Shift') {
-                if (pmag === -1) {
-                    document.getElementById('lifting').classList.add('active')
-                    document.getElementById('tile-map').classList.add('active')
-                } else {
-                    const magSelected = document.querySelector('.mag-selected')
-                    if (magSelected) {
-                        magSelected.classList.add('active')
-                    }
-                }
-            }
-            if (e.key === 'Control') {
-                if (pmag === -1) {
-                    document.getElementById('tile-map').classList.add('active')
-                    document.getElementById('lowering').classList.add('active')
-                } else {
-                    const magSelected = document.querySelector('.mag-selected')
-                    if (magSelected) {
-                        magSelected.classList.add('active')
-                    }
-                }
-            }
-        })
-
-        window.addEventListener('keyup', (e) => {
-            if (e.key === 'Shift') {
-                document.getElementById('lifting').classList.remove('active')
-                document.getElementById('tile-map').classList.remove('active')
-                const magSelected = document.querySelector('.mag-selected')
-                if (magSelected) {
-                    magSelected.classList.remove('active')
-                }
-            }
-            if (e.key === 'Control') {
-                document.getElementById('lowering').classList.remove('active')
-                document.getElementById('tile-map').classList.remove('active')
-                const magSelected = document.querySelector('.mag-selected')
-                if (magSelected) {
-                    magSelected.classList.remove('active')
-                }
-            }
-        })
-    </script>
 </head>
 
 <body _="init add .loaded to me">
@@ -137,10 +38,10 @@ templ IndexComponent() {
                         </div>
                     </div>
                 </div>
+                @ConfigOptions(CanyonsConfig())
             </div>
-            @ConfigOptions(DefaultConfig())
             <div id="mapWrapper">
-                <div id="tile-map"></div>
+                <div id="tile-map" _="on load call window.SetTileMapSize()"></div>
             </div>
             @OptionsComponent()
         </div>
@@ -170,7 +71,7 @@ templ ConfigOptions(data MapConfig) {
         </div>
         <div class="form-field">
             <label for="PostSmoothDistance">Smooth Distance</label>
-            <input type="number" id="PostSmoothDistance" name="PostSmoothDistance" value="1" min="1" max="5" step="1">
+            <input type="number" id="PostSmoothDistance" name="PostSmoothDistance" value={ strconv.Itoa(data.PostSmoothDistance) } min="1" max="5" step="1">
         </div>
         <div class="form-field">
             <label for="InitialAltitude">Base Map Height</label>
@@ -247,12 +148,12 @@ templ ConfigOptions(data MapConfig) {
         </div>
         <div class="form-field">
             <label for="DefaultRunnerMinlength">Crest Min Length</label>
-            <input type="number" id="DefaultRunnerMinlength" value={ strconv.Itoa(data.DefaultRunnerMinlength) } min="0"
+            <input type="number" id="DefaultRunnerMinlength" name="DefaultRunnerMinlength" value={ strconv.Itoa(data.DefaultRunnerMinlength) } min="0"
                 max="5">
         </div>
         <div class="form-field">
             <label for="DefaultRunnerMaxlength">Crest Max Length</label>
-            <input type="number" id="DefaultRunnerMaxlength" value={ strconv.Itoa(data.DefaultRunnerMaxlength) } min="0"
+            <input type="number" id="DefaultRunnerMaxlength" name="DefaultRunnerMaxlength" value={ strconv.Itoa(data.DefaultRunnerMaxlength) } min="0"
                 max="10">
         </div>
     </form>

@@ -2,6 +2,7 @@ package comps
 
 import (
 	"ago/vector"
+	"fmt"
 	"math"
 	"math/rand"
 )
@@ -47,12 +48,45 @@ func NewTileMap(maxAltitude, width, height int, config MapConfig) TileMap {
 
 func (tm *TileMap) FromConfig() {
 	tm.FillSeedData(int(tm.Config.InitialAltitude))
+	fmt.Println(tm.Info())
 	tm.SeedData = tm.SelectiveRandomSmooth(tm.Config.SelectiveDistance, tm.Width/tm.Config.WidthModifier)
+	fmt.Println(tm.Info())
 	tm.FormMountains()
+	fmt.Println(tm.Info())
 	tm.FormRanges()
+	fmt.Println(tm.Info())
 	tm.SeedData = tm.Smooth(tm.Config.PostSmoothDistance)
 	tm.SeedData = tm.RandomSmooth(5)
 	tm.Tiles = tm.GenerateTiles()
+}
+
+func (tm TileMap) Info() string {
+	// return min and max vals
+	return fmt.Sprintf("Width: %d, Height: %d, Max: %d, Min: %d, Class: %s", tm.Width, tm.Height, tm.MaxValue(), tm.MinValue(), tm.Class())
+}
+
+func (tm TileMap) MaxValue() int {
+	max := 0
+	for y := 0; y < tm.Height; y++ {
+		for x := 0; x < tm.Width; x++ {
+			if tm.AltAt(x, y) > max {
+				max = tm.AltAt(x, y)
+			}
+		}
+	}
+	return max
+}
+
+func (tm TileMap) MinValue() int {
+	min := 10
+	for y := 0; y < tm.Height; y++ {
+		for x := 0; x < tm.Width; x++ {
+			if tm.AltAt(x, y) < min {
+				min = tm.AltAt(x, y)
+			}
+		}
+	}
+	return min
 }
 
 func (tm TileMap) Class() string {
@@ -80,7 +114,13 @@ func (tm *TileMap) FillSeedData(modifier int) {
 	for x := 0; x < tm.Width; x++ {
 		for y := 0; y < tm.Height; y++ {
 			// Roll two numbers between 1 and 10, then average them
-			val := (rand.Intn(10) + 1 + rand.Intn(10) + 1) / 2
+			firstrand := rand.Intn(10) + 1
+			secondrand := rand.Intn(10) + 1
+			val := (firstrand + secondrand) / 2
+			fmt.Println(firstrand, secondrand, "=>", val)
+			if val == 10 {
+				fmt.Println("10!!!")
+			}
 
 			// Apply the modifier to shift the result up or down
 			val += modifier
@@ -245,7 +285,7 @@ func (mc MapConfig) RandomMountainRadius() int {
 }
 
 func (mc MapConfig) RandomMountainAltitude() int {
-	return mc.MountainAltitude + rand.Intn(mc.MountainAltitudeWindow*2+1) - mc.MountainAltitudeWindow
+	return mc.MountainAltitude - rand.Intn(mc.MountainAltitudeWindow*2+1) - mc.MountainAltitudeWindow
 }
 
 func (tm TileMap) CreateMountain(x, y, peakRadius, altitude int, runners int) {
@@ -262,14 +302,20 @@ func (tm TileMap) CreateMountain(x, y, peakRadius, altitude int, runners int) {
 }
 
 func (tm TileMap) CreateMountainRange(x, y int) {
-	// Draw the central mountain an d force max height on the center mountain
-	tm.CreateMountain(x, y, tm.Config.RandomMountainRadius(), tm.Config.MountainAltitude, tm.Config.DefaultRunners)
-	// Draw the surrounding mountains
 	for i := 1; i <= tm.Config.MountainRangeSize; i++ {
 		// Random radius for the mountain
 		radius := tm.Config.RandomMountainRadius()
 		// Random altitude for the mountain
-		altitude := tm.Config.RandomMountainAltitude()
+		var altitude int
+		if i == 1 {
+			altitude = tm.Config.MountainAltitude
+		} else {
+			altitude = tm.Config.RandomMountainAltitude()
+		}
+		if altitude > 10 {
+			fmt.Println("altitude > 10")
+			fmt.Println(altitude)
+		}
 		// Random position for the mountain
 		pos := vector.Vec2{X: float64(x + rand.Intn(tm.Config.RangeSpread) - 1), Y: float64(y + rand.Intn(tm.Config.RangeSpread) - 1)}
 		tm.CreateMountain(int(pos.X), int(pos.Y), radius, altitude, tm.Config.DefaultRunners)

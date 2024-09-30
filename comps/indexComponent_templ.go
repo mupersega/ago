@@ -31,15 +31,15 @@ func IndexComponent() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><link href=\"https://fonts.googleapis.com/css2?family=VT323&amp;display=swap\" rel=\"stylesheet\"><script src=\"https://unpkg.com/htmx.org@2.0.2\" integrity=\"sha384-Y7hw+L/jvKeWIRRkqWYfPcvVxHzVzn5REgzbawhxAuQGwX1XWe70vji+VSeHOThJ\" crossorigin=\"anonymous\"></script><script src=\"https://unpkg.com/hyperscript.org@0.9.12\"></script><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin><link rel=\"stylesheet\" href=\"/static/style.css\"><link rel=\"stylesheet\" href=\"/static/media.css\"><title>HTMX Terra</title><script>\n        /**\n        * @param {Event} e\n        */\n        function ReTrigger(e) {\n            if ((e.type === \"mouseover\" || e.type === \"click\") && e.shiftKey === false && e.ctrlKey === false) {\n                return\n            }\n            var target = e.currentTarget;\n            if (!(target instanceof HTMLElement)) {\n                return\n            }\n            if (target.nodeName !== \"SPAN\") {\n                return\n            }\n            var magnitude = 1;\n            var pmag = window.$pMag || -1;\n            var shapeEvent = new CustomEvent(\"shape\", {\n                detail: {\n                    magnitude: e.shiftKey ? magnitude : -1 * magnitude,\n                    prescribedMagnitude: pmag,\n                },\n            });\n            target.dispatchEvent(shapeEvent);\n        }\n        htmx.on(\"htmx:afterSwap\", function (e) {\n            console.log(\"htmx:afterSwap\", e);\n            if (e.detail.target.id === \"tile-map\") {\n                const elt = document.getElementById(\"mapWrapper\");\n                // make visible after timeout\n                setTimeout(() => {\n                    elt.style.opacity = 1;\n                    elt.classList.add(\"loaded\");\n                }, 400);\n            }\n        });\n        htmx.on(\"htmx:load\", function (e) {\n            var element = e.detail.elt;\n\n            // Add event listeners to all 'span.tile' elements within the loaded element\n            element.querySelectorAll(\"span.tile\").forEach(function (span) {\n                span.addEventListener(\"click\", ReTrigger);\n                span.addEventListener(\"mouseover\", ReTrigger);\n            });\n\n            // If the loaded element itself is a 'span.tile', add event listeners to it\n            if (element.matches(\"span.tile\")) {\n                element.addEventListener(\"click\", ReTrigger);\n                element.addEventListener(\"mouseover\", ReTrigger);\n            }\n        });\n        // add control and shift keydown listeners\n        window.addEventListener('keydown', (e) => {\n            var pmag = window.$pMag || -1;\n            if (e.key === 'Shift') {\n                if (pmag === -1) {\n                    document.getElementById('lifting').classList.add('active')\n                    document.getElementById('tile-map').classList.add('active')\n                } else {\n                    const magSelected = document.querySelector('.mag-selected')\n                    if (magSelected) {\n                        magSelected.classList.add('active')\n                    }\n                }\n            }\n            if (e.key === 'Control') {\n                if (pmag === -1) {\n                    document.getElementById('tile-map').classList.add('active')\n                    document.getElementById('lowering').classList.add('active')\n                } else {\n                    const magSelected = document.querySelector('.mag-selected')\n                    if (magSelected) {\n                        magSelected.classList.add('active')\n                    }\n                }\n            }\n        })\n\n        window.addEventListener('keyup', (e) => {\n            if (e.key === 'Shift') {\n                document.getElementById('lifting').classList.remove('active')\n                document.getElementById('tile-map').classList.remove('active')\n                const magSelected = document.querySelector('.mag-selected')\n                if (magSelected) {\n                    magSelected.classList.remove('active')\n                }\n            }\n            if (e.key === 'Control') {\n                document.getElementById('lowering').classList.remove('active')\n                document.getElementById('tile-map').classList.remove('active')\n                const magSelected = document.querySelector('.mag-selected')\n                if (magSelected) {\n                    magSelected.classList.remove('active')\n                }\n            }\n        })\n    </script></head><body _=\"init add .loaded to me\"><div id=\"main\"><div id=\"grid-wrapper\"><div id=\"header\" _=\"init add .loaded to me\"><div><h1>HTMX terra</h1><div id=\"header-actions\"><div class=\"option-wrapper\"><p class=\"button\" hx-post=\"/new\" hx-target=\"#tile-map\" hx-swap=\"outerHTML\" hx-trigger=\"click\" hx-include=\"#config-form\" _=\"on load wait 1s\n                                            then add .pulse-border-once to me\n                                            on htmx:beforeRequest set #mapWrapper.style.opacity to 0\">New Map</p></div><div class=\"option-wrapper\"><div class=\"button\" hx-get=\"/display\" hx-target=\"#tile-map\" hx-swap=\"outerHTML\">Get Last</div></div></div></div></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><link href=\"https://fonts.googleapis.com/css2?family=VT323&amp;display=swap\" rel=\"stylesheet\"><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin><!-- if development --><script type=\"module\" src=\"http://localhost:5173/@vite/client\"></script><script type=\"module\" src=\"http://localhost:5173/static/main.ts\"></script><title>HTMX Terra</title></head><body _=\"init add .loaded to me\"><div id=\"main\"><div id=\"grid-wrapper\"><div id=\"header\" _=\"init add .loaded to me\"><div><h1>HTMX terra</h1><div id=\"header-actions\"><div class=\"option-wrapper\"><p class=\"button\" hx-post=\"/new\" hx-target=\"#tile-map\" hx-swap=\"outerHTML\" hx-trigger=\"click\" hx-include=\"#config-form\" _=\"on load wait 1s\n                                            then add .pulse-border-once to me\n                                            on htmx:beforeRequest set #mapWrapper.style.opacity to 0\">New Map</p></div><div class=\"option-wrapper\"><div class=\"button\" hx-get=\"/display\" hx-target=\"#tile-map\" hx-swap=\"outerHTML\">Get Last</div></div></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = ConfigOptions(DefaultConfig()).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = ConfigOptions(CanyonsConfig()).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"mapWrapper\"><div id=\"tile-map\"></div></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div id=\"mapWrapper\"><div id=\"tile-map\" _=\"on load call window.SetTileMapSize()\"></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -76,7 +76,20 @@ func ConfigOptions(data MapConfig) templ.Component {
 			templ_7745c5c3_Var2 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form id=\"config-form\" class=\"config-form\"><h3>General</h3><div class=\"form-field\"><label for=\"size-form\">Map Size</label><fieldset id=\"size-form\" class=\"size-form\" _=\"on change remove .active-label from my children\n                    then add .active-label to target.nextElementSibling\n                    then remove .pulse-border-once from previous .button\n                    then wait 0.1s\n                    then add .pulse-border-once to previous .button\"><input class=\"hidden-radio\" type=\"radio\" id=\"small-select\" name=\"size\" value=\"s\"> <label for=\"small-select\">s</label> <input class=\"hidden-radio\" type=\"radio\" id=\"medium-select\" name=\"size\" value=\"m\"> <label for=\"medium-select\">m</label> <input class=\"hidden-radio\" type=\"radio\" id=\"large-select\" name=\"size\" value=\"l\" checked> <label for=\"large-select\" class=\"active-label\">l</label></fieldset></div><div class=\"form-field\"><label for=\"PostSmoothDistance\">Smooth Distance</label> <input type=\"number\" id=\"PostSmoothDistance\" name=\"PostSmoothDistance\" value=\"1\" min=\"1\" max=\"5\" step=\"1\"></div><div class=\"form-field\"><label for=\"InitialAltitude\">Base Map Height</label> <select name=\"InitialAltitude\" id=\"InitialAltitude\"><option value=\"4\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form id=\"config-form\" class=\"config-form\"><h3>General</h3><div class=\"form-field\"><label for=\"size-form\">Map Size</label><fieldset id=\"size-form\" class=\"size-form\" _=\"on change remove .active-label from my children\n                    then add .active-label to target.nextElementSibling\n                    then remove .pulse-border-once from previous .button\n                    then wait 0.1s\n                    then add .pulse-border-once to previous .button\"><input class=\"hidden-radio\" type=\"radio\" id=\"small-select\" name=\"size\" value=\"s\"> <label for=\"small-select\">s</label> <input class=\"hidden-radio\" type=\"radio\" id=\"medium-select\" name=\"size\" value=\"m\"> <label for=\"medium-select\">m</label> <input class=\"hidden-radio\" type=\"radio\" id=\"large-select\" name=\"size\" value=\"l\" checked> <label for=\"large-select\" class=\"active-label\">l</label></fieldset></div><div class=\"form-field\"><label for=\"PostSmoothDistance\">Smooth Distance</label> <input type=\"number\" id=\"PostSmoothDistance\" name=\"PostSmoothDistance\" value=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var3 string
+		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(data.PostSmoothDistance))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `comps/indexComponent.templ`, Line: 74, Col: 128}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" min=\"1\" max=\"5\" step=\"1\"></div><div class=\"form-field\"><label for=\"InitialAltitude\">Base Map Height</label> <select name=\"InitialAltitude\" id=\"InitialAltitude\"><option value=\"4\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -130,12 +143,12 @@ func ConfigOptions(data MapConfig) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var3 string
-		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(data.Mountains))
+		var templ_7745c5c3_Var4 string
+		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(data.Mountains))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `comps/indexComponent.templ`, Line: 204, Col: 101}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `comps/indexComponent.templ`, Line: 105, Col: 101}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -143,12 +156,12 @@ func ConfigOptions(data MapConfig) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var4 string
-		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(data.MountainAltitude))
+		var templ_7745c5c3_Var5 string
+		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(data.MountainAltitude))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `comps/indexComponent.templ`, Line: 208, Col: 122}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `comps/indexComponent.templ`, Line: 109, Col: 122}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -156,13 +169,13 @@ func ConfigOptions(data MapConfig) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var5 string
-		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(
+		var templ_7745c5c3_Var6 string
+		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(
 			strconv.Itoa(data.MountainAltitudeWindow))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `comps/indexComponent.templ`, Line: 214, Col: 57}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `comps/indexComponent.templ`, Line: 115, Col: 57}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -170,12 +183,12 @@ func ConfigOptions(data MapConfig) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var6 string
-		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(data.MountainRadius))
+		var templ_7745c5c3_Var7 string
+		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(data.MountainRadius))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `comps/indexComponent.templ`, Line: 218, Col: 116}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `comps/indexComponent.templ`, Line: 119, Col: 116}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -183,13 +196,13 @@ func ConfigOptions(data MapConfig) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var7 string
-		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(
+		var templ_7745c5c3_Var8 string
+		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(
 			strconv.Itoa(data.MountainRadiusWindow))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `comps/indexComponent.templ`, Line: 224, Col: 55}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `comps/indexComponent.templ`, Line: 125, Col: 55}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -197,12 +210,12 @@ func ConfigOptions(data MapConfig) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var8 string
-		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(data.MountainRanges))
+		var templ_7745c5c3_Var9 string
+		templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(data.MountainRanges))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `comps/indexComponent.templ`, Line: 229, Col: 116}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `comps/indexComponent.templ`, Line: 130, Col: 116}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -210,13 +223,13 @@ func ConfigOptions(data MapConfig) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var9 string
-		templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(
+		var templ_7745c5c3_Var10 string
+		templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(
 			strconv.Itoa(data.MountainRangeSize))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `comps/indexComponent.templ`, Line: 235, Col: 52}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `comps/indexComponent.templ`, Line: 136, Col: 52}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -224,12 +237,12 @@ func ConfigOptions(data MapConfig) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var10 string
-		templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(data.RangeSpread))
+		var templ_7745c5c3_Var11 string
+		templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(data.RangeSpread))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `comps/indexComponent.templ`, Line: 239, Col: 107}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `comps/indexComponent.templ`, Line: 140, Col: 107}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -237,38 +250,38 @@ func ConfigOptions(data MapConfig) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var11 string
-		templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(data.DefaultRunners))
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `comps/indexComponent.templ`, Line: 245, Col: 116}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" min=\"0\" max=\"20\"></div><div class=\"form-field\"><label for=\"DefaultRunnerMinlength\">Crest Min Length</label> <input type=\"number\" id=\"DefaultRunnerMinlength\" value=\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
 		var templ_7745c5c3_Var12 string
-		templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(data.DefaultRunnerMinlength))
+		templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(data.DefaultRunners))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `comps/indexComponent.templ`, Line: 250, Col: 110}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `comps/indexComponent.templ`, Line: 146, Col: 116}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" min=\"0\" max=\"5\"></div><div class=\"form-field\"><label for=\"DefaultRunnerMaxlength\">Crest Max Length</label> <input type=\"number\" id=\"DefaultRunnerMaxlength\" value=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" min=\"0\" max=\"20\"></div><div class=\"form-field\"><label for=\"DefaultRunnerMinlength\">Crest Min Length</label> <input type=\"number\" id=\"DefaultRunnerMinlength\" name=\"DefaultRunnerMinlength\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var13 string
-		templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(data.DefaultRunnerMaxlength))
+		templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(data.DefaultRunnerMinlength))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `comps/indexComponent.templ`, Line: 255, Col: 110}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `comps/indexComponent.templ`, Line: 151, Col: 140}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" min=\"0\" max=\"5\"></div><div class=\"form-field\"><label for=\"DefaultRunnerMaxlength\">Crest Max Length</label> <input type=\"number\" id=\"DefaultRunnerMaxlength\" name=\"DefaultRunnerMaxlength\" value=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var14 string
+		templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(data.DefaultRunnerMaxlength))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `comps/indexComponent.templ`, Line: 156, Col: 140}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var14))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

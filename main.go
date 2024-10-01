@@ -2,7 +2,9 @@ package main
 
 import (
 	"ago/comps"
+	"ago/factory"
 	"ago/helper"
+	"ago/vector"
 	"context"
 	"embed"
 	"fmt"
@@ -129,7 +131,10 @@ func main() {
 		store.SetTileMap(userId, tm)
 		// return just the tile
 		templ.Handler(comps.TileComponent(tm.Tiles[y][x])).ServeHTTP(w, r)
-		store.AddEditedPoint(userId, comps.Coord{X: x, Y: y})
+		store.AddEditedPoint(userId, vector.Vec2{
+			X: float64(x),
+			Y: float64(y),
+		})
 	})
 
 	r.Get("/options", func(w http.ResponseWriter, r *http.Request) {
@@ -165,6 +170,22 @@ func main() {
 			templ.Handler(comps.TileMapComponent(user.TileMap)).ServeHTTP(w, r)
 			store.ClearEditedPoints(user.Id)
 		}
+	})
+
+	r.Get("/tilemap", func(w http.ResponseWriter, r *http.Request) {
+		// send back a tilemap in json format
+		userId, err := GetUserId(r)
+		if err != nil {
+			http.Error(w, "user_id not found", http.StatusInternalServerError)
+		}
+		user := store.GetUser(userId)
+		boxes := factory.BoxesFromTileMap(user.TileMap)
+		jsonStr, err := boxes.AsJson()
+		if err != nil {
+			http.Error(w, "error converting tilemap to json", http.StatusInternalServerError)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.Write([]byte(jsonStr))
 	})
 
 	http.ListenAndServe(":8080", r)

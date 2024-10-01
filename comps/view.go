@@ -7,27 +7,6 @@ import (
 	"math/rand"
 )
 
-type TileMap struct {
-	MaxAltitude int
-	Width       int
-	Height      int
-	SeedData    [][]int
-	Tiles       [][]Tile
-	Config      MapConfig
-}
-
-type Tile struct {
-	Id       int
-	Altitude int
-	X        int
-	Y        int
-}
-
-type Coord struct {
-	X int
-	Y int
-}
-
 type InitialAltitudeModifier int
 
 func NewTileMap(maxAltitude, width, height int, config MapConfig) TileMap {
@@ -113,16 +92,10 @@ func (tm *TileMap) Set(x, y, value int) {
 func (tm *TileMap) FillSeedData(modifier int) {
 	for x := 0; x < tm.Width; x++ {
 		for y := 0; y < tm.Height; y++ {
-			// Roll two numbers between 1 and 10, then average them
 			firstrand := rand.Intn(10) + 1
 			secondrand := rand.Intn(10) + 1
 			val := (firstrand + secondrand) / 2
-			fmt.Println(firstrand, secondrand, "=>", val)
-			if val == 10 {
-				fmt.Println("10!!!")
-			}
 
-			// Apply the modifier to shift the result up or down
 			val += modifier
 
 			// Ensure the value stays between 1 and 10
@@ -157,21 +130,24 @@ func (tm TileMap) Smooth(distance int) [][]int {
 	}
 	for y := 0; y < tm.Height; y++ {
 		for x := 0; x < tm.Width; x++ {
-			smoothed[y][x] = tm.SmoothPoint(x, y, distance)
+			smoothed[y][x] = tm.SmoothPoint(vector.Vec2{
+				X: float64(x),
+				Y: float64(y),
+			}, distance)
 		}
 	}
 	return smoothed
 }
 
 // average the altitude of the surrounding tiles
-func (tm TileMap) SmoothPoint(x, y, distance int) int {
+func (tm TileMap) SmoothPoint(vec vector.Vec2, distance int) int {
 	total := 0
 	count := 0
 
 	for dx := -distance; dx <= distance; dx++ {
 		for dy := -distance; dy <= distance; dy++ {
-			wrappedX := (x + dx + tm.Width) % tm.Width
-			wrappedY := (y + dy + tm.Height) % tm.Height
+			wrappedX := (int(vec.X) + dx + tm.Width) % tm.Width
+			wrappedY := (int(vec.Y) + dy + tm.Height) % tm.Height
 
 			total += tm.AltAt(wrappedX, wrappedY)
 			count++
@@ -183,30 +159,33 @@ func (tm TileMap) SmoothPoint(x, y, distance int) int {
 }
 
 // smooth the points and their neighbours
-func (tm TileMap) SmoothPointsAndNeighbours(points []Coord, distance int) [][]int {
+func (tm TileMap) SmoothPointsAndNeighbours(points []vector.Vec2, distance int) [][]int {
 	copied := make([][]int, tm.Width)
 	for i, innerSlice := range tm.SeedData {
 		copied[i] = make([]int, len(innerSlice))
 		copy(copied[i], innerSlice)
 	}
 	// get neighbours and store
-	neighbours := make([]Coord, 0)
+	neighbours := make([]vector.Vec2, 0)
 	for _, point := range points {
-		neighbours = append(neighbours, tm.GetNeighbours(point.X, point.Y, distance)...)
+		neighbours = append(neighbours, tm.GetNeighbours(point, distance)...)
 	}
 	for _, neighbour := range neighbours {
-		copied[neighbour.Y][neighbour.X] = tm.SmoothPoint(neighbour.X, neighbour.Y, distance)
+		copied[int(neighbour.Y)][int(neighbour.X)] = tm.SmoothPoint(vector.Vec2{
+			X: neighbour.X,
+			Y: neighbour.Y,
+		}, distance)
 	}
 	return copied
 }
 
-func (tm TileMap) GetNeighbours(x, y, distance int) []Coord {
-	neighbours := make([]Coord, 0)
+func (tm TileMap) GetNeighbours(vec vector.Vec2, distance int) []vector.Vec2 {
+	neighbours := make([]vector.Vec2, 0)
 	for dx := -distance; dx <= distance; dx++ {
 		for dy := -distance; dy <= distance; dy++ {
-			wrappedX := (x + dx + tm.Width) % tm.Width
-			wrappedY := (y + dy + tm.Height) % tm.Height
-			neighbours = append(neighbours, Coord{X: wrappedX, Y: wrappedY})
+			wrappedX := (int(vec.X) + dx + tm.Width) % tm.Width
+			wrappedY := (int(vec.Y) + dy + tm.Height) % tm.Height
+			neighbours = append(neighbours, vector.Vec2{X: float64(wrappedX), Y: float64(wrappedY)})
 		}
 	}
 	return neighbours
@@ -220,7 +199,10 @@ func (tm TileMap) RandomSmooth(maxDistance int) [][]int {
 	}
 	for y := 0; y < tm.Height; y++ {
 		for x := 0; x < tm.Width; x++ {
-			smoothed[y][x] = tm.SmoothPoint(x, y, rand.Intn(maxDistance))
+			smoothed[y][x] = tm.SmoothPoint(vector.Vec2{
+				X: float64(x),
+				Y: float64(y),
+			}, rand.Intn(maxDistance))
 		}
 	}
 	return smoothed
@@ -232,11 +214,14 @@ func (tm TileMap) SelectiveRandomSmooth(maxDistance int, numberOfPoints int) [][
 	for i := 0; i < tm.Width; i++ {
 		smoothed[i] = make([]int, tm.Height)
 	}
-	pointsToSmooth := make([]Coord, 0)
+	pointsToSmooth := make([]vector.Vec2, 0)
 	for i := 0; i < numberOfPoints; i++ {
 		x := rand.Intn(tm.Width)
 		y := rand.Intn(tm.Height)
-		pointsToSmooth = append(pointsToSmooth, Coord{X: x, Y: y})
+		pointsToSmooth = append(pointsToSmooth, vector.Vec2{
+			X: float64(x),
+			Y: float64(y),
+		})
 	}
 	smoothed = tm.SmoothPointsAndNeighbours(pointsToSmooth, maxDistance)
 	return smoothed

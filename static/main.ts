@@ -6,6 +6,7 @@ import _hyperscript from 'hyperscript.org'
 _hyperscript.browserInit()
 
 import './style.scss'
+import './three-dee.ts'
 
 declare global {
     interface Window {

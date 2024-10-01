@@ -23,12 +23,13 @@ body.loaded {
   transition: opacity 0.2s ease-in-out;
 }
 
-#main {
+main {
   display: flex;
   height: 100%;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 
 #grid-wrapper {
@@ -164,7 +165,7 @@ body.loaded {
   background-color: #eee;
 }
 
-#tile-map {
+.tile-map {
   display: grid;
   border-radius: 0.3em;
   border: 2px dotted #ccc;
@@ -172,27 +173,42 @@ body.loaded {
   min-width: 1px;
   min-height: 1px;
   overflow: hidden;
+  position: relative;
+
+  &.small {
+    grid-template-columns: repeat(30, 1fr);
+    grid-template-rows: repeat(30, 1fr);
+  }
+
+  &.medium {
+    grid-template-columns: repeat(50, 1fr);
+    grid-template-rows: repeat(50, 1fr);
+  }
+
+  &.large {
+    grid-template-columns: repeat(70, 1fr);
+    grid-template-rows: repeat(70, 1fr);
+  }
+
+  &.active {
+    filter: drop-shadow(0 0 5px #666);
+    cursor: crosshair;
+
+    .tile:hover {
+      border: 1px solid rgb(255, 23, 255);
+    }
+  }
+
+  .three-dee {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
 }
 
-#tile-map.small {
-  grid-template-columns: repeat(30, 1fr);
-  grid-template-rows: repeat(30, 1fr);
-}
-
-#tile-map.medium {
-  grid-template-columns: repeat(50, 1fr);
-  grid-template-rows: repeat(50, 1fr);
-}
-
-#tile-map.large {
-  grid-template-columns: repeat(70, 1fr);
-  grid-template-rows: repeat(70, 1fr);
-}
-
-#tile-map.active {
-  filter: drop-shadow(0 0 5px #666);
-  cursor: crosshair;
-}
 
 .hidden-radio {
   display: none;
@@ -231,9 +247,7 @@ body.loaded {
   border: 1px solid #ccc;
 }
 
-#tile-map.active > .tile:hover {
-  border: 1px solid rgb(255, 23, 255);
-}
+#tile-map
 
 .tile.htmx-request{
   background-color: rgb(255, 23, 255);
@@ -246,7 +260,7 @@ body.loaded {
   align-items: center;
   justify-content: center;
   grid-area: map;
-  opacity: 0;
+  // opacity: 0;
   z-index: 1;
   height: 100%;
   width: 100%;
@@ -434,18 +448,20 @@ body.loaded {
   background-color: #1d6200; /* Lighter green, representing plains or low hills */
 }
 .hght-7 {
-  background-color: #6b4429; /* Dark brown, representing mountains */
+  background-color: #6b4429; /* Dark brown, representing hills */
 }
 .hght-8 {
   background-color: #838383; /* Light grey for lower mountains */
 }
 .hght-9 {
-  background-color: #EEE; /* Snow white, highest peaks */
+  background-color: #EEE; /* Snow white, high peaks */
 }
 .hght-10 {
-  background-color: #fff; /* Black, representing water */
+  background-color: #fff; /* Pure White, representing highest snowy peaks */
 }
-
+.col {
+  color: #1919c39c;
+}
 .config-form {
   grid-area: config;
   display: flex;
@@ -485,4 +501,14 @@ body.loaded {
   padding: 0.3em;
   text-align: center;
   width: 110px;
+}
+
+.extras {
+  grid-area: open;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 0.3em;
+  z-index: 1;
 }

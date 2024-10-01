@@ -2,6 +2,7 @@ package main
 
 import (
 	"ago/comps"
+	"ago/vector"
 	"fmt"
 	"net/http"
 )
@@ -14,7 +15,7 @@ type UserStore struct {
 	Id           string
 	KV           map[string]string
 	TileMap      comps.TileMap
-	EditedPoints []comps.Coord
+	EditedPoints []vector.Vec2
 }
 
 func NewStore() Store {
@@ -74,17 +75,17 @@ func (s *Store) DisplayStore() {
 	}
 }
 
-func (s *Store) GetEditedPoints(ip string) []comps.Coord {
+func (s *Store) GetEditedPoints(ip string) []vector.Vec2 {
 	return s.GetUser(ip).EditedPoints
 }
 
-func (s *Store) SetEditedPoints(ip string, points []comps.Coord) {
+func (s *Store) SetEditedPoints(ip string, points []vector.Vec2) {
 	user := s.GetUser(ip)
 	user.EditedPoints = points
 	s.SetUser(ip, user)
 }
 
-func (s *Store) AddEditedPoint(ip string, point comps.Coord) {
+func (s *Store) AddEditedPoint(ip string, point vector.Vec2) {
 	// add point only if it doesn't already exist
 	user := s.GetUser(ip)
 	for _, editedPoint := range user.EditedPoints {
@@ -98,6 +99,6 @@ func (s *Store) AddEditedPoint(ip string, point comps.Coord) {
 
 func (s *Store) ClearEditedPoints(ip string) {
 	user := s.GetUser(ip)
-	user.EditedPoints = make([]comps.Coord, 0)
+	user.EditedPoints = make([]vector.Vec2, 0)
 	s.SetUser(ip, user)
 }

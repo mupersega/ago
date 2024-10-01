@@ -44,6 +44,11 @@ templ IndexComponent() {
                 <div id="tile-map" _="on load call window.SetTileMapSize()"></div>
             </div>
             @OptionsComponent()
+            <div class="extras">
+                <button _="on click call window.utils.fetchTileMap()">
+                    Generate Map
+                </button>
+            </div>
         </div>
     </div>
 </body>

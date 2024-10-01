@@ -109,3 +109,57 @@ func (v Vec2) Equals(v2 Vec2) bool {
 func (v Vec2) Clone() Vec2 {
 	return Vec2{v.X, v.Y}
 }
+
+type Vec3 struct {
+	X float64 `json:"x"`
+	Y float64 `json:"y"`
+	Z float64 `json:"z"`
+}
+
+func (v Vec3) Add(v2 Vec3) Vec3 {
+	return Vec3{v.X + v2.X, v.Y + v2.Y, v.Z + v2.Z}
+}
+
+func (v Vec3) Sub(v2 Vec3) Vec3 {
+	return Vec3{v.X - v2.X, v.Y - v2.Y, v.Z - v2.Z}
+}
+
+func (v Vec3) Mul(s float64) Vec3 {
+	return Vec3{v.X * s, v.Y * s, v.Z * s}
+}
+
+func (v Vec3) Div(s float64) Vec3 {
+	return Vec3{v.X / s, v.Y / s, v.Z / s}
+}
+
+func (v Vec3) Mag() float64 {
+	return math.Sqrt(v.X*v.X + v.Y*v.Y + v.Z*v.Z)
+}
+
+func (v Vec3) Normalize() Vec3 {
+	return v.Div(v.Mag())
+}
+
+func (v Vec3) Dot(v2 Vec3) float64 {
+	return v.X*v2.X + v.Y*v2.Y + v.Z*v2.Z
+}
+
+func (v Vec3) Cross(v2 Vec3) Vec3 {
+	return Vec3{
+		v.Y*v2.Z - v.Z*v2.Y,
+		v.Z*v2.X - v.X*v2.Z,
+		v.X*v2.Y - v.Y*v2.X,
+	}
+}
+
+func (v Vec3) Angle(v2 Vec3) float64 {
+	return v.Dot(v2) / (v.Mag() * v2.Mag())
+}
+
+func (v Vec3) Rotate(angle float64) Vec3 {
+	return Vec3{
+		v.X*math.Cos(angle) - v.Y*math.Sin(angle),
+		v.X*math.Sin(angle) + v.Y*math.Cos(angle),
+		v.Z,
+	}
+}

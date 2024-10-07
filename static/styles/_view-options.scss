@@ -1,0 +1,56 @@
+.view-options {
+    grid-area: view-options;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+    width: 100%;
+}
+
+
+.mini-map {
+    display: grid;
+    border-radius: $golden-double;
+    border: 2px solid $accent;
+    z-index: 1;
+    height: 100px;
+    width: 100px;
+    overflow: hidden;
+    position: relative;
+
+    h3 {
+        align-self: center;
+        justify-self: center;
+    }
+
+    &.small {
+        grid-template-columns: repeat(30, 1fr);
+        grid-template-rows: repeat(30, 1fr);
+    }
+
+    &.medium {
+        grid-template-columns: repeat(50, 1fr);
+        grid-template-rows: repeat(50, 1fr);
+    }
+
+    &.large {
+        grid-template-columns: repeat(70, 1fr);
+        grid-template-rows: repeat(70, 1fr);
+    }
+
+    &.huge {
+        grid-template-columns: repeat(120, 1fr);
+        grid-template-rows: repeat(120, 1fr);
+    }
+
+    &.active {
+        filter: drop-shadow(0 0 5px $mid);
+        cursor: crosshair;
+
+        .tile:hover {
+            border: 1px solid $accent;
+        }
+    }
+}

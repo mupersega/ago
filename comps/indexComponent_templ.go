@@ -8,8 +8,6 @@ package comps
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import "strconv"
-
 func IndexComponent() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
@@ -31,23 +29,27 @@ func IndexComponent() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><link href=\"https://fonts.googleapis.com/css2?family=VT323&amp;display=swap\" rel=\"stylesheet\"><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin><!-- if development --><script type=\"module\" src=\"http://localhost:5173/@vite/client\"></script><script type=\"module\" src=\"http://localhost:5173/static/main.ts\"></script><title>HTMX Terra</title></head><body _=\"init add .loaded to me\"><div id=\"main\"><div id=\"grid-wrapper\"><div id=\"header\" _=\"init add .loaded to me\"><div><h1>HTMX terra</h1><div id=\"header-actions\"><div class=\"option-wrapper\"><p class=\"button\" hx-post=\"/new\" hx-target=\"#tile-map\" hx-swap=\"outerHTML\" hx-trigger=\"click\" hx-include=\"#config-form\" _=\"on load wait 1s\n                                            then add .pulse-border-once to me\n                                            on htmx:beforeRequest set #mapWrapper.style.opacity to 0\">New Map</p></div><div class=\"option-wrapper\"><div class=\"button\" hx-get=\"/display\" hx-target=\"#tile-map\" hx-swap=\"outerHTML\">Get Last</div></div></div></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><link href=\"https://fonts.googleapis.com/css2?family=VT323&amp;display=swap\" rel=\"stylesheet\"><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin><!-- if development --><script type=\"module\" src=\"http://localhost:5173/@vite/client\"></script><script type=\"module\" src=\"http://localhost:5173/static/main.ts\"></script><title>HTMX Terra</title></head><body _=\"init add .loaded to me\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = ConfigOptions(CanyonsConfig()).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = HeaderTpl().Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div id=\"mapWrapper\"><div id=\"tile-map\" _=\"on load call window.SetTileMapSize()\"></div></div>")
+		templ_7745c5c3_Err = ViewOptionsComponent().Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = OptionsComponent().Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = MainTpl().Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"extras\"><button _=\"on click call window.utils.fetchTileMap()\">Generate Map</button></div></div></div></body></html>")
+		templ_7745c5c3_Err = GuiComp().Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</body></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -55,7 +57,7 @@ func IndexComponent() templ.Component {
 	})
 }
 
-func ConfigOptions(data MapConfig) templ.Component {
+func FooterTpl() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -76,216 +78,7 @@ func ConfigOptions(data MapConfig) templ.Component {
 			templ_7745c5c3_Var2 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form id=\"config-form\" class=\"config-form\"><h3>General</h3><div class=\"form-field\"><label for=\"size-form\">Map Size</label><fieldset id=\"size-form\" class=\"size-form\" _=\"on change remove .active-label from my children\n                    then add .active-label to target.nextElementSibling\n                    then remove .pulse-border-once from previous .button\n                    then wait 0.1s\n                    then add .pulse-border-once to previous .button\"><input class=\"hidden-radio\" type=\"radio\" id=\"small-select\" name=\"size\" value=\"s\"> <label for=\"small-select\">s</label> <input class=\"hidden-radio\" type=\"radio\" id=\"medium-select\" name=\"size\" value=\"m\"> <label for=\"medium-select\">m</label> <input class=\"hidden-radio\" type=\"radio\" id=\"large-select\" name=\"size\" value=\"l\" checked> <label for=\"large-select\" class=\"active-label\">l</label></fieldset></div><div class=\"form-field\"><label for=\"PostSmoothDistance\">Smooth Distance</label> <input type=\"number\" id=\"PostSmoothDistance\" name=\"PostSmoothDistance\" value=\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var3 string
-		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(data.PostSmoothDistance))
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `comps/indexComponent.templ`, Line: 79, Col: 128}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" min=\"1\" max=\"5\" step=\"1\"></div><div class=\"form-field\"><label for=\"InitialAltitude\">Base Map Height</label> <select name=\"InitialAltitude\" id=\"InitialAltitude\"><option value=\"4\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		if data.InitialAltitude == 4 {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" selected")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(">Mountain</option> <option value=\"2\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		if data.InitialAltitude == 2 {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" selected")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(">Hills</option> <option value=\"0\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		if data.InitialAltitude == 0 {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" selected")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(">Plains</option> <option value=\"-2\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		if data.InitialAltitude == -2 {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" selected")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(">Water</option> <option value=\"-4\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		if data.InitialAltitude == -4 {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" selected")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(">Deep Water</option></select></div><h3>Mountains</h3><div class=\"form-field\"><label for=\"Mountains\">Quantity</label> <input type=\"number\" id=\"Mountains\" name=\"Mountains\" value=\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var4 string
-		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(data.Mountains))
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `comps/indexComponent.templ`, Line: 110, Col: 101}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" max=\"20\" min=\"0\"></div><div class=\"form-field\"><label for=\"MountainAltitude\">Mountain Altitude</label> <input type=\"number\" id=\"MountainAltitude\" name=\"MountainAltitude\" value=\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var5 string
-		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(data.MountainAltitude))
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `comps/indexComponent.templ`, Line: 114, Col: 122}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" max=\"10\" min=\"1\"></div><div class=\"form-field\"><label for=\"MountainAltitudeWindow\">Mountain Altitude Variance</label> <input type=\"number\" id=\"MountainAltitudeWindow\" name=\"MountainAltitudeWindow\" value=\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var6 string
-		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(
-			strconv.Itoa(data.MountainAltitudeWindow))
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `comps/indexComponent.templ`, Line: 120, Col: 57}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" min=\"0\" max=\"9\"></div><div class=\"form-field\"><label for=\"MountainRadius\">Mountain Radius</label> <input type=\"number\" id=\"MountainRadius\" name=\"MountainRadius\" value=\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var7 string
-		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(data.MountainRadius))
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `comps/indexComponent.templ`, Line: 124, Col: 116}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" min=\"1\" max=\"10\"></div><div class=\"form-field\"><label for=\"MountainRadiusWindow\">Mountain Radius Variance</label> <input type=\"number\" id=\"MountainRadiusWindow\" name=\"MountainRadiusWindow\" value=\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var8 string
-		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(
-			strconv.Itoa(data.MountainRadiusWindow))
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `comps/indexComponent.templ`, Line: 130, Col: 55}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" min=\"0\" max=\"10\"></div><h3>Mountain Ranges/Clusters</h3><div class=\"form-field\"><label for=\"MountainRanges\">Quantity</label> <input type=\"number\" id=\"MountainRanges\" name=\"MountainRanges\" value=\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var9 string
-		templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(data.MountainRanges))
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `comps/indexComponent.templ`, Line: 135, Col: 116}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" min=\"0\" max=\"10\"></div><div class=\"form-field\"><label for=\"MountainRangeSize\">Mountains per Cluster</label> <input type=\"number\" id=\"MountainRangeSize\" name=\"MountainRangeSize\" value=\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var10 string
-		templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(
-			strconv.Itoa(data.MountainRangeSize))
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `comps/indexComponent.templ`, Line: 141, Col: 52}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" min=\"1\" max=\"10\"></div><div class=\"form-field\"><label for=\"RangeSpread\">Cluster Spread</label> <input type=\"number\" id=\"RangeSpread\" name=\"RangeSpread\" value=\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var11 string
-		templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(data.RangeSpread))
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `comps/indexComponent.templ`, Line: 145, Col: 107}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" min=\"1\" max=\"30\"></div><h3>Mountain Crests</h3><div class=\"form-field\"><label for=\"DefaultRunners\">Quantity</label> <input type=\"number\" id=\"DefaultRunners\" name=\"DefaultRunners\" value=\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var12 string
-		templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(data.DefaultRunners))
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `comps/indexComponent.templ`, Line: 151, Col: 116}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" min=\"0\" max=\"20\"></div><div class=\"form-field\"><label for=\"DefaultRunnerMinlength\">Crest Min Length</label> <input type=\"number\" id=\"DefaultRunnerMinlength\" name=\"DefaultRunnerMinlength\" value=\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var13 string
-		templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(data.DefaultRunnerMinlength))
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `comps/indexComponent.templ`, Line: 156, Col: 140}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" min=\"0\" max=\"5\"></div><div class=\"form-field\"><label for=\"DefaultRunnerMaxlength\">Crest Max Length</label> <input type=\"number\" id=\"DefaultRunnerMaxlength\" name=\"DefaultRunnerMaxlength\" value=\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var14 string
-		templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(data.DefaultRunnerMaxlength))
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `comps/indexComponent.templ`, Line: 161, Col: 140}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var14))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" min=\"0\" max=\"10\"></div></form>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<footer><button class=\"button -dynamic\" _=\"on click call window.utils.fetchTileMap()\">Generate Map</button></footer>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

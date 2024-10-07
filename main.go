@@ -1,12 +1,14 @@
 package main
 
 import (
+	"ago/cfg"
 	"ago/comps"
 	"ago/factory"
 	"ago/helper"
 	"ago/vector"
 	"context"
 	"embed"
+	"encoding/json"
 	"fmt"
 	"log"
 
@@ -53,6 +55,7 @@ func main() {
 		if err != nil {
 			http.Error(w, "user_id not found", http.StatusInternalServerError)
 		}
+		// TODO: This should be changed to village - city - wilds - world | each with its own 3d accoutrements
 		formSize := r.Form.Get("size")
 		var size int
 		switch formSize {
@@ -62,17 +65,25 @@ func main() {
 			size = 50
 		case "l":
 			size = 70
+		case "h":
+			size = 300
 		default:
 			size = 30
 		}
 
-		tm := comps.NewTileMap(maxAltitude, size, size, ConfigFromRequest(r))
+		tm := factory.NewTileMap(maxAltitude, size, size, ConfigFromRequest(r))
 
 		user := store.GetUser(userId)
 		user = user.SetTileMap(tm)
 		store.SetUser(userId, user)
 
-		templ.Handler(comps.TileMapComponent(tm)).ServeHTTP(w, r)
+		mapBuildData := BuildMapData(tm)
+		jsonStr, err := mapBuildData.AsJson()
+		if err != nil {
+			http.Error(w, "error converting tilemap to json", http.StatusInternalServerError)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.Write([]byte(jsonStr))
 	})
 
 	r.Get("/display", func(w http.ResponseWriter, r *http.Request) {
@@ -82,7 +93,7 @@ func main() {
 		}
 		user := store.GetUser(userId)
 		if user.TileMap.Width != 0 {
-			templ.Handler(comps.TileMapComponent(user.TileMap)).ServeHTTP(w, r)
+			templ.Handler(comps.MiniMapComponent(user.TileMap)).ServeHTTP(w, r)
 		}
 	})
 
@@ -137,10 +148,6 @@ func main() {
 		})
 	})
 
-	r.Get("/options", func(w http.ResponseWriter, r *http.Request) {
-		templ.Handler(comps.OptionsComponent()).ServeHTTP(w, r)
-	})
-
 	r.Get("/smooth", func(w http.ResponseWriter, r *http.Request) {
 		userId, err := GetUserId(r)
 		if err != nil {
@@ -151,7 +158,7 @@ func main() {
 			user.TileMap.SeedData = user.TileMap.Smooth(1)
 			user.TileMap.Tiles = user.TileMap.GenerateTiles()
 			store.SetTileMap(userId, user.TileMap)
-			templ.Handler(comps.TileMapComponent(user.TileMap)).ServeHTTP(w, r)
+			templ.Handler(comps.MiniMapComponent(user.TileMap)).ServeHTTP(w, r)
 			store.ClearEditedPoints(userId)
 		}
 	})
@@ -167,20 +174,26 @@ func main() {
 			user.TileMap.SeedData = user.TileMap.SmoothPointsAndNeighbours(points, 1)
 			user.TileMap.Tiles = user.TileMap.GenerateTiles()
 			store.SetTileMap(user.Id, user.TileMap)
-			templ.Handler(comps.TileMapComponent(user.TileMap)).ServeHTTP(w, r)
+			templ.Handler(comps.MiniMapComponent(user.TileMap)).ServeHTTP(w, r)
 			store.ClearEditedPoints(user.Id)
 		}
 	})
 
 	r.Get("/tilemap", func(w http.ResponseWriter, r *http.Request) {
+		// returns
+		// interface MapBuildData {
+		// 	tileBoxes: TileBox[];
+		// 	otherMeshes: TileBox[];
+		// }
 		// send back a tilemap in json format
 		userId, err := GetUserId(r)
 		if err != nil {
 			http.Error(w, "user_id not found", http.StatusInternalServerError)
 		}
 		user := store.GetUser(userId)
-		boxes := factory.BoxesFromTileMap(user.TileMap)
-		jsonStr, err := boxes.AsJson()
+
+		mapBuildData := BuildMapData(user.TileMap)
+		jsonStr, err := mapBuildData.AsJson()
 		if err != nil {
 			http.Error(w, "error converting tilemap to json", http.StatusInternalServerError)
 		}
@@ -192,7 +205,7 @@ func main() {
 
 }
 
-func deduceXYFromId(id int, tileMap comps.TileMap) (x, y int, err error) {
+func deduceXYFromId(id int, tileMap factory.TileMap) (x, y int, err error) {
 	if tileMap.Width == 0 {
 		// Return an error as dividing by zero is not allowed
 		return 0, 0, fmt.Errorf("tileMap.Width is zero, division by zero is not allowed")
@@ -239,12 +252,27 @@ func GetUserId(r *http.Request) (string, error) {
 	return userId, nil
 }
 
-func ConfigFromRequest(r *http.Request) comps.MapConfig {
+type MapData struct {
+	TileBoxes   []factory.Box `json:"tileBoxes"`
+	OtherMeshes []factory.Box `json:"otherMeshes"`
+	Width       int           `json:"width"`
+	Height      int           `json:"height"`
+}
+
+func (m MapData) AsJson() (string, error) {
+	jsonData, err := json.Marshal(m)
+	if err != nil {
+		return "", err
+	}
+	return string(jsonData), nil
+}
+
+func ConfigFromRequest(r *http.Request) cfg.MapConfig {
 	// Parse the form data
 	r.ParseForm()
 
 	// Load the default config
-	config := comps.DefaultConfig()
+	config := cfg.DefaultConfig()
 
 	// Update config fields only if they exist in the form
 	if val := r.Form.Get("SelectiveDistance"); val != "" {
@@ -257,7 +285,7 @@ func ConfigFromRequest(r *http.Request) comps.MapConfig {
 		config.PostSmoothDistance = helper.Atoi(val)
 	}
 	if val := r.Form.Get("InitialAltitude"); val != "" {
-		config.InitialAltitude = comps.InitialAltitudeModifier(helper.Atoi(val))
+		config.InitialAltitude = cfg.InitialAltitudeModifier(helper.Atoi(val))
 	}
 	if val := r.Form.Get("Mountains"); val != "" {
 		config.Mountains = helper.Atoi(val)
@@ -294,4 +322,19 @@ func ConfigFromRequest(r *http.Request) comps.MapConfig {
 	}
 
 	return config
+}
+
+func BuildMapData(tm factory.TileMap) MapData {
+	mapBuildData := MapData{}
+
+	mapBuildData.TileBoxes = factory.BoxesFromTileMap(tm)
+
+	mapBuildData.OtherMeshes = make([]factory.Box, 0)
+	waterBox := factory.WaterBoxFromTileMap(tm)
+	mapBuildData.OtherMeshes = append(mapBuildData.OtherMeshes, waterBox)
+
+	mapBuildData.Width = tm.Width
+	mapBuildData.Height = tm.Height
+
+	return mapBuildData
 }

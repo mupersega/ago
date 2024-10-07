@@ -1,0 +1,289 @@
+// Primary colors
+$hght-0: #000040;
+$hght-1: #000080;
+$hght-2: #0000CD;
+$hght-3: #1E90FF;
+$hght-4: #2dc7ff;
+$hght-5: #02a50d;
+$hght-6: #1d6200;
+$hght-7: #6b4429;
+$hght-8: #838383;
+$hght-9: #EEE;
+$hght-10: #fff;
+$accent: #ff17ff;
+$accent-tr: #ff17ff59;
+$secondary: #6d75e8;
+$secondary-tr: #6d75e859;
+
+// Neutral Colors (for text, borders, etc.)
+$neutral-0: #000;
+$neutral-1: #333;
+$neutral-2: #666;
+$neutral-3: #999;
+$neutral-4: #ccc;
+$neutral-5: #eee;
+$neutral-6: #fff;
+
+// Transparent Neutral Colors
+$neutral-0-transparent: rgba($neutral-0, 0.5); // 50% transparency as an example
+$neutral-1-transparent: rgba($neutral-1, 0.5);
+$neutral-2-transparent: rgba($neutral-2, 0.5);
+$neutral-3-transparent: rgba($neutral-3, 0.5);
+$neutral-4-transparent: rgba($neutral-4, 0.5);
+$neutral-5-transparent: rgba($neutral-5, 0.5);
+$neutral-6-transparent: rgba($neutral-6, 0.5);
+
+$hghts: (
+    $hght-0,
+    $hght-1,
+    $hght-2,
+    $hght-3,
+    $hght-4,
+    $hght-5,
+    $hght-6,
+    $hght-7,
+    $hght-8,
+    $hght-9,
+    $hght-10
+);
+
+// Array of neutral and transparent neutral colors
+$neutral-colors: (
+    $neutral-0,
+    $neutral-1,
+    $neutral-2,
+    $neutral-3,
+    $neutral-4,
+    $neutral-5,
+    $neutral-6
+);
+
+$black: #000;
+$white: #fff;
+$mid: #333;
+$light: #ccc;
+$clear : transparent;
+
+$neutral-colors-transparent: (
+    $neutral-0-transparent,
+    $neutral-1-transparent,
+    $neutral-2-transparent,
+    $neutral-3-transparent,
+    $neutral-4-transparent,
+    $neutral-5-transparent,
+    $neutral-6-transparent
+);
+
+$single-unit: 0.25em;
+$double-unit: $single-unit * 2;
+$triple-unit: $single-unit * 3;
+$golden-double: $single-unit * 1.6;
+$golden-triple: $single-unit * 2.4;
+
+// Generate height classes
+@for $i from 0 through length($hghts) - 1 {
+    .hght-#{$i} {
+        background-color: nth($hghts, $i + 1);
+    }
+}
+
+// Breakpoint variables
+$breakpoint-xs: 480px;
+$breakpoint-sm: 768px;
+$breakpoint-md: 1024px;
+$breakpoint-lg: 1280px;
+$breakpoint-xl: 1440px;
+
+@mixin respond-up($breakpoint) {
+    @if $breakpoint ==xs {
+        @media (min-width: $breakpoint-xs) {
+            @content;
+        }
+    }
+
+    @else if $breakpoint ==sm {
+        @media (min-width: $breakpoint-sm) {
+            @content;
+        }
+    }
+
+    @else if $breakpoint ==md {
+        @media (min-width: $breakpoint-md) {
+            @content;
+        }
+    }
+
+    @else if $breakpoint ==lg {
+        @media (min-width: $breakpoint-lg) {
+            @content;
+        }
+    }
+
+    @else if $breakpoint ==xl {
+        @media (min-width: $breakpoint-xl) {
+            @content;
+        }
+    }
+}
+
+// Generate background, border, and text color classes
+@for $i from 0 through length($neutral-colors) - 1 {
+    .bg-neutral-#{$i} {
+        background-color: nth($neutral-colors, $i + 1);
+    }
+
+    .border-neutral-#{$i} {
+        border-color: nth($neutral-colors, $i + 1);
+    }
+
+    .text-neutral-#{$i} {
+        color: nth($neutral-colors, $i + 1);
+    }
+
+    // Transparent versions
+    .bg-neutral-#{$i}-transparent {
+        background-color: nth($neutral-colors-transparent, $i + 1);
+    }
+
+    .border-neutral-#{$i}-transparent {
+        border-color: nth($neutral-colors-transparent, $i + 1);
+    }
+
+    .text-neutral-#{$i}-transparent {
+        color: nth($neutral-colors-transparent, $i + 1);
+    }
+}
+
+// Generate accent classes
+.accent {
+    background-color: $accent;
+    color: white;
+}
+
+.accent-transparent {
+    background-color: rgba($accent, 0.5);
+    color: white;
+}
+
+// Generate hover classes
+@for $i from 0 through length($hghts) - 1 {
+    .hght-#{$i}:hover {
+        filter: brightness(1.3);
+        border: 1px solid #ccc;
+    }
+}
+
+.action {
+    cursor: pointer;
+    transition: transform 0.1s ease-in;
+}
+
+// Button classes using border classes and padding classes
+.button {
+    font: inherit;
+    border: 1px solid $light;
+    border-radius: $golden-double;
+    padding: $golden-double $golden-triple;
+    background-color: $clear;
+    cursor: pointer;
+    user-select: none;
+
+    &.-dynamic {
+        &:hover {
+            @extend .focus-border;
+        }
+
+        &:focus {
+            @extend .focus-outline;
+            @extend .focus-shadow;
+        }
+
+        &.-grouped {
+            border-radius: 0;
+            border: none;
+
+            &:hover {
+                background-color: $secondary;
+                color: $white;
+            }
+
+            &:focus {
+                background-color: $secondary;
+                color: $white;
+                outline: none;
+                box-shadow: none;
+            }
+        }
+    }
+
+    &.-selected {
+        background-color: $accent !important;
+        color: $white !important;
+    }
+
+}
+
+.button-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+
+    &:focus-within {
+        @extend .focus-border;
+        @extend .focus-shadow;
+    }
+
+    &.-joined {
+        gap: 0;
+        border: 1px solid $light;
+        border-radius: $golden-double;
+        overflow: hidden;
+
+        .button:last-child {
+            border-left: 1px solid $light;
+        }
+    }
+
+    &.-vertical {
+        flex-direction: column;
+
+        &.-joined {
+            gap: 0;
+            border-radius: $golden-double;
+            overflow: hidden;
+
+            .button:last-child {
+                border-top: 1px solid $light;
+                border-left: none;
+            }
+        }
+    }
+}
+
+.focus-shadow {
+    box-shadow: -1px 1px 0px 0px #FF3FFF,
+        -3px 2px 5px 0px $secondary;
+    transition: box-shadow 0.1s ease-in;
+}
+
+.focus-border {
+    border-color: $accent;
+}
+
+.focus-outline {
+    outline: 1px solid $accent;
+
+}
+
+.divider {
+    height: 100%;
+    width: 1px;
+    background-color: $light;
+}
+
+.scrollbar-clipper {
+    border-radius: $golden-double;
+    overflow: hidden;
+    border: 1px solid $light;
+    z-index: 1;
+}

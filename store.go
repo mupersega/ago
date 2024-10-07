@@ -1,7 +1,7 @@
 package main
 
 import (
-	"ago/comps"
+	"ago/factory"
 	"ago/vector"
 	"fmt"
 	"net/http"
@@ -14,7 +14,7 @@ type Store struct {
 type UserStore struct {
 	Id           string
 	KV           map[string]string
-	TileMap      comps.TileMap
+	TileMap      factory.TileMap
 	EditedPoints []vector.Vec2
 }
 
@@ -44,13 +44,13 @@ func (s *Store) GetKV(ip, key string) string {
 	return s.GetUser(ip).KV[key]
 }
 
-func (s *Store) SetTileMap(ip string, tm comps.TileMap) {
+func (s *Store) SetTileMap(ip string, tm factory.TileMap) {
 	user := s.GetUser(ip)
 	user.TileMap = tm
 	s.SetUser(ip, user)
 }
 
-func (us UserStore) SetTileMap(tm comps.TileMap) UserStore {
+func (us UserStore) SetTileMap(tm factory.TileMap) UserStore {
 	us.TileMap = tm
 	return us
 }
@@ -71,7 +71,7 @@ func (s *Store) DisplayStore() {
 		for key, value := range user.KV {
 			println(key + " : " + value)
 		}
-		user.TileMap.Display()
+		user.TileMap.String()
 	}
 }
 

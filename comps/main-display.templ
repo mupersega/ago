@@ -1,0 +1,77 @@
+package comps
+
+templ MainTpl() {
+	<main>
+		<section
+			id="main-display"
+			class="main-display"
+			_="
+			// load state
+			on load call window.appState.getState()
+				then if it.viewMode == '2d' add .-active to #twodee
+				else if it.viewMode == '3d' add .-active to #threedee
+			end
+			// listen for view mode change
+			on 'viewModeChanged' from window
+				if event.detail.state.viewMode == '2d'
+					remove .-active from #threedee then
+					add .-active to #twodee
+				else if event.detail.state.viewMode == '3d'
+					remove .-active from #twodee then
+					add .-active to #threedee
+				end
+			end"
+		>
+			<div id="twodee" class="canvas-container twodee">
+				<canvas id="twodee-view" class="canvas twodee__view"></canvas>
+				<canvas id="twodee-interactive" class="canvas twodee__interactive"></canvas>
+			</div>
+			<div id="threedee" class="canvas-container threedee">
+				<canvas id="threedee-view"></canvas>
+			</div>
+		</section>
+	</main>
+	@MapActionsComponent()
+}
+
+templ MapActionsComponent() {
+	<section class="map-actions">
+		<div class="map-actions__height-controls -action-group">
+			<div class="mode-indicator">
+				<div
+					class="mode-indicator__mode -lower"
+					_="on mouseenter put 'ctrl+<br>click|hover' into me
+						on mouseleave put 'lower ▼' into me"
+				>
+					lower ▼
+				</div>
+				<div class="break"></div>
+				<div
+					class="mode-indicator__mode -lift"
+					_="on mouseenter put 'shift+<br> click|hover' into me
+						on mouseleave put 'lift ▲' into me"
+				>
+					lift ▲
+				</div>
+			</div>
+			<div class="magnitude-selector">
+				// emmet div.magnitude-option{$}*10
+				<div class="magnitude-selector__option hght-0" _="on click if I match .-selected then toggle .-selected then set $pMag to -1 else take .-selected then set $pMag to '0' end">_</div>
+				<div class="magnitude-selector__option hght-2" _="on click if I match .-selected then toggle .-selected then set $pMag to -1 else take .-selected then set $pMag to '2' end">_</div>
+				<div class="magnitude-selector__option hght-1" _="on click if I match .-selected then toggle .-selected then set $pMag to -1 else take .-selected then set $pMag to '1' end">_</div>
+				<div class="magnitude-selector__option hght-3" _="on click if I match .-selected then toggle .-selected then set $pMag to -1 else take .-selected then set $pMag to '3' end">_</div>
+				<div class="magnitude-selector__option hght-4" _="on click if I match .-selected then toggle .-selected then set $pMag to -1 else take .-selected then set $pMag to '4' end">_</div>
+				<div class="magnitude-selector__option hght-5" _="on click if I match .-selected then toggle .-selected then set $pMag to -1 else take .-selected then set $pMag to '5' end">_</div>
+				<div class="magnitude-selector__option hght-6" _="on click if I match .-selected then toggle .-selected then set $pMag to -1 else take .-selected then set $pMag to '6' end">_</div>
+				<div class="magnitude-selector__option hght-7" _="on click if I match .-selected then toggle .-selected then set $pMag to -1 else take .-selected then set $pMag to '7' end">_</div>
+				<div class="magnitude-selector__option hght-8" _="on click if I match .-selected then toggle .-selected then set $pMag to -1 else take .-selected then set $pMag to '8' end">_</div>
+				<div class="magnitude-selector__option hght-9" _="on click if I match .-selected then toggle .-selected then set $pMag to -1 else take .-selected then set $pMag to '9' end">_</div>
+				<div class="magnitude-selector__option hght-10" _="on click if I match .-selected then toggle .-selected then set $pMag to -1 else take .-selected then set $pMag to '10' end">_</div>
+			</div>
+		</div>
+		<div class="map-actions__smooth-actions -action-group">
+			<button class="button -dynamic" hx-trigger="click" hx-get="/smooth" hx-target="#mini-map" hx-swap="outerHTML">smooth all</button>
+			<button class="button -dynamic" hx-trigger="click" hx-get="/smoothedited" hx-target="#mini-map" hx-swap="outerHTML">smooth edited</button>
+		</div>
+	</section>
+}

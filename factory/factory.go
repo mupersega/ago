@@ -1,7 +1,6 @@
 package factory
 
 import (
-	"ago/comps"
 	"ago/vector"
 	"encoding/json"
 )
@@ -59,39 +58,53 @@ func GetColor(altitude int, opacity float64) Color {
 	return Color{hex, transparent, opacity}
 }
 
-func BoxFromTile(tile comps.Tile, widthModifier, heightModifier float64) Box {
+func BoxFromTile(tile Tile) Box {
 	return Box{
 		Width:  1,
 		Height: float64(tile.Altitude),
 		Depth:  1,
 		Color:  GetColor(tile.Altitude, 1),
 		Pos: vector.Vec3{
-			X: float64(tile.X) - widthModifier - 0.5,
+			X: float64(tile.X),
 			Y: float64(tile.Altitude) / 2,
-			Z: float64(tile.Y) - heightModifier - 0.5},
+			Z: float64(tile.Y)},
 	}
 }
 
-func BoxesFromTileMap(tm comps.TileMap) Boxes {
+func BoxesFromTileMap(tm TileMap) Boxes {
 	var boxes Boxes
 	for y := 0; y < tm.Height; y++ {
 		for x := 0; x < tm.Width; x++ {
-			boxes = append(boxes, BoxFromTile(tm.Tiles[y][x], float64(tm.Width)/2, float64(tm.Height)/2))
+			boxes = append(boxes, BoxFromTile(tm.Tiles[y][x]))
 		}
 	}
-	waterBox := Box{
-		Width:  float64(tm.Width) - .2,
-		Height: 5,
-		Depth:  float64(tm.Height) - .2,
-		Color:  GetColor(2, 0.5),
-		Pos:    vector.Vec3{X: -1, Y: 2.4, Z: -1},
-	}
-	boxes = append(boxes, waterBox)
 	return boxes
+}
+
+func WaterBoxFromTileMap(tm TileMap) Box {
+	return Box{
+		Width:  float64(tm.Width),
+		Height: 4.8,
+		Depth:  float64(tm.Height),
+		Color:  GetColor(2, 0.5),
+		Pos: vector.Vec3{
+			X: float64(tm.Width)/2 - .5,
+			Y: 2.4,
+			Z: float64(tm.Height)/2 - .5,
+		},
+	}
 }
 
 // AsJson converts the Boxes collection to a JSON string.
 func (b Boxes) AsJson() (string, error) {
+	jsonData, err := json.Marshal(b)
+	if err != nil {
+		return "", err
+	}
+	return string(jsonData), nil
+}
+
+func (b Box) AsJson() (string, error) {
 	jsonData, err := json.Marshal(b)
 	if err != nil {
 		return "", err

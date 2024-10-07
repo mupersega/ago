@@ -1,0 +1,173 @@
+main {
+    grid-area: display;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    .main-display {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        position: relative;
+
+        .canvas-container {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+
+            .canvas {
+                position: absolute;
+                display: block;
+                transition: opacity 0.1s ease-in-out;
+
+                &.-hidden {
+                    opacity: 0;
+                }
+            }
+
+
+            &.-active {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .two-dee {
+                &__view {
+                    display: block;
+                }
+
+                &__interactive {
+                    display: block;
+                }
+            }
+        }
+    }
+}
+
+.map-actions {
+    grid-area: map-actions;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.3em;
+
+    &__height-controls {
+
+        .mode-indicator {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 0.3em;
+
+            &__mode {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                user-select: none;
+
+                &.-lower {
+                    color: #2dc7ff;
+                    border-radius: 0 0 4px 4px;
+
+                    &.-active {
+                        background-color: #2dc7ff;
+                        border: 1px solid #1E90FF;
+                        color: #fff;
+                        transform-origin: top;
+                    }
+                }
+
+                &.-lift {
+                    color: #02a50d;
+                    border-radius: 4px 4px 0 0;
+
+                    &.-active {
+                        background-color: #02a50d;
+                        border: 1px solid #1d6200;
+                        color: #fff;
+                        transform-origin: bottom;
+                    }
+                }
+            }
+        }
+
+        .magnitude-selector {
+            display: grid;
+            grid-auto-flow: column;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            border-radius: 0.3em;
+
+            &__option {
+                display: block;
+                height: 1em;
+                width: 1em;
+                color: transparent;
+                user-select: none;
+
+                &.-selected {
+                    transform: scale(1.5);
+                    border: 1px solid rgb(255, 23, 255);
+                    border-radius: 0.3em;
+                    z-index: 1;
+                    transition-duration: 0.1s ease-in;
+                }
+
+                &:hover {
+                    filter: brightness(1.2);
+                    border: 1px solid rgb(255, 23, 255);
+                }
+            }
+
+            :nth-child(1) {
+                border-radius: 0.3em 0 0 0.3em;
+
+                &.-selected {
+                    border-radius: 0.3em;
+                }
+            }
+
+            :last-child {
+                border-radius: 0 0.3em 0.3em 0;
+
+                &.-selected {
+                    border-radius: 0.3em;
+                }
+            }
+        }
+
+    }
+}
+
+.gui-comp {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.3em;
+    padding: 0.3em;
+    border: 1px solid #ccc;
+    border-radius: 0.3em;
+    background-color: #fff;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    display: none;
+}

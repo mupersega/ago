@@ -1,165 +1,32 @@
 package comps
 
-import "strconv"
-
 templ IndexComponent() {
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    // <link rel="stylesheet" href="/static/style.css" />
-    <!-- if development -->
-    <script type="module" src="http://localhost:5173/@vite/client"></script>
-    <script type="module" src="http://localhost:5173/static/main.ts"></script>
-    <title>HTMX Terra</title>
-</head>
-
-<body _="init add .loaded to me">
-    <div id="main">
-        <div id="grid-wrapper">
-            <div id="header" _="init add .loaded to me">
-                <div>
-                    <h1>HTMX terra</h1>
-                    <div id="header-actions">
-                        <div class="option-wrapper">
-                            <p class="button" hx-post="/new" hx-target="#tile-map" hx-swap="outerHTML"
-                                hx-trigger="click" hx-include="#config-form" _="on load wait 1s
-                                            then add .pulse-border-once to me
-                                            on htmx:beforeRequest set #mapWrapper.style.opacity to 0">
-                                New Map</p>
-                        </div>
-                        <div class="option-wrapper">
-                            <div class="button" hx-get="/display" hx-target="#tile-map" hx-swap="outerHTML">Get Last
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                @ConfigOptions(CanyonsConfig())
-            </div>
-            <div id="mapWrapper">
-                <div id="tile-map" _="on load call window.SetTileMapSize()"></div>
-            </div>
-            @OptionsComponent()
-            <div class="extras">
-                <button _="on click call window.utils.fetchTileMap()">
-                    Generate Map
-                </button>
-            </div>
-        </div>
-    </div>
-</body>
-
-</html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet"/>
+			<link rel="preconnect" href="https://fonts.googleapis.com"/>
+			<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+			<!-- if development -->
+			<script type="module" src="http://localhost:5173/@vite/client"></script>
+			<script type="module" src="http://localhost:5173/static/main.ts"></script>
+			<title>HTMX Terra</title>
+		</head>
+		<body _="init add .loaded to me">
+			@HeaderTpl()
+			@ViewOptionsComponent()
+			@MainTpl()
+			@GuiComp()
+			// @FooterTpl()
+		</body>
+	</html>
 }
 
-templ ConfigOptions(data MapConfig) {
-    <form id="config-form" class="config-form">
-        <h3>General</h3>
-        <div class="form-field">
-            <label for="size-form">Map Size</label>
-            <fieldset id="size-form" class="size-form" _="on change remove .active-label from my children
-                    then add .active-label to target.nextElementSibling
-                    then remove .pulse-border-once from previous .button
-                    then wait 0.1s
-                    then add .pulse-border-once to previous .button">
-                <input class="hidden-radio" type="radio" id="small-select" name="size" value="s">
-                <label for="small-select">s</label>
-                <input class="hidden-radio" type="radio" id="medium-select" name="size" value="m">
-                <label for="medium-select">m</label>
-                <input class="hidden-radio" type="radio" id="large-select" name="size" value="l" checked>
-                <label for="large-select" class="active-label">l</label>
-            </fieldset>
-        </div>
-        <div class="form-field">
-            <label for="PostSmoothDistance">Smooth Distance</label>
-            <input type="number" id="PostSmoothDistance" name="PostSmoothDistance" value={ strconv.Itoa(data.PostSmoothDistance) } min="1" max="5" step="1">
-        </div>
-        <div class="form-field">
-            <label for="InitialAltitude">Base Map Height</label>
-            <select name="InitialAltitude" id="InitialAltitude">
-                <option value="4"
-                    if data.InitialAltitude == 4 {
-                        selected
-                    }
-                    >Mountain</option>
-                <option value="2"
-                    if data.InitialAltitude == 2 {
-                        selected
-                    }>Hills</option>
-                <option value="0"
-                    if data.InitialAltitude == 0 {
-                        selected
-                    }>Plains</option>
-                <option value="-2"
-                    if data.InitialAltitude == -2 {
-                        selected
-                    }>Water</option>
-                <option value="-4"
-                    if data.InitialAltitude == -4 {
-                        selected
-                    }>Deep Water</option>
-            </select>
-        </div>
-        <h3>Mountains</h3>
-        <div class="form-field">
-            <label for="Mountains">Quantity</label>
-            <input type="number" id="Mountains" name="Mountains" value={ strconv.Itoa(data.Mountains) } max="20" min="0">
-        </div>
-        <div class="form-field">
-            <label for="MountainAltitude">Mountain Altitude</label>
-            <input type="number" id="MountainAltitude" name="MountainAltitude" value={ strconv.Itoa(data.MountainAltitude) }
-                max="10" min="1">
-        </div>
-        <div class="form-field">
-            <label for="MountainAltitudeWindow">Mountain Altitude Variance</label>
-            <input type="number" id="MountainAltitudeWindow" name="MountainAltitudeWindow" value={
-                strconv.Itoa(data.MountainAltitudeWindow) } min="0" max="9">
-        </div>
-        <div class="form-field">
-            <label for="MountainRadius">Mountain Radius</label>
-            <input type="number" id="MountainRadius" name="MountainRadius" value={ strconv.Itoa(data.MountainRadius) }
-                min="1" max="10">
-        </div>
-        <div class="form-field">
-            <label for="MountainRadiusWindow">Mountain Radius Variance</label>
-            <input type="number" id="MountainRadiusWindow" name="MountainRadiusWindow" value={
-                strconv.Itoa(data.MountainRadiusWindow) } min="0" max="10">
-        </div>
-        <h3>Mountain Ranges/Clusters</h3>
-        <div class="form-field">
-            <label for="MountainRanges">Quantity</label>
-            <input type="number" id="MountainRanges" name="MountainRanges" value={ strconv.Itoa(data.MountainRanges) }
-                min="0" max="10">
-        </div>
-        <div class="form-field">
-            <label for="MountainRangeSize">Mountains per Cluster</label>
-            <input type="number" id="MountainRangeSize" name="MountainRangeSize" value={
-                strconv.Itoa(data.MountainRangeSize) } min="1" max="10">
-        </div>
-        <div class="form-field">
-            <label for="RangeSpread">Cluster Spread</label>
-            <input type="number" id="RangeSpread" name="RangeSpread" value={ strconv.Itoa(data.RangeSpread) } min="1"
-                max="30">
-        </div>
-        <h3>Mountain Crests</h3>
-        <div class="form-field">
-            <label for="DefaultRunners">Quantity</label>
-            <input type="number" id="DefaultRunners" name="DefaultRunners" value={ strconv.Itoa(data.DefaultRunners) }
-                min="0" max="20">
-        </div>
-        <div class="form-field">
-            <label for="DefaultRunnerMinlength">Crest Min Length</label>
-            <input type="number" id="DefaultRunnerMinlength" name="DefaultRunnerMinlength" value={ strconv.Itoa(data.DefaultRunnerMinlength) } min="0"
-                max="5">
-        </div>
-        <div class="form-field">
-            <label for="DefaultRunnerMaxlength">Crest Max Length</label>
-            <input type="number" id="DefaultRunnerMaxlength" name="DefaultRunnerMaxlength" value={ strconv.Itoa(data.DefaultRunnerMaxlength) } min="0"
-                max="10">
-        </div>
-    </form>
+templ FooterTpl() {
+	<footer>
+		<button class="button -dynamic" _="on click call window.utils.fetchTileMap()">
+			Generate Map
+		</button>
+	</footer>
 }

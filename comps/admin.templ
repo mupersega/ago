@@ -1,0 +1,27 @@
+
+package comps
+
+const (
+	Admin = "admin"
+)
+
+type AppState struct {
+	User     string
+	ViewMode string
+}
+
+templ GuiComp() {
+	<form action="none" name="state" class="gui-comp">
+		<label for="user">User</label>
+		<input type="text" id="user" name="user" placeholder="Email" value="Admin"/>
+		<label for="mode">Mode</label>
+		<select type="text" id="mode" name="password" placeholder="Password">
+			<option value="2d" selected>2d</option>
+			<option value="3d">3d</option>
+		</select>
+		<button
+			class="button -dynamic"
+			_="on click halt the event then call window.appState.update({user: document.getElementById('user').value, viewMode: document.getElementById('mode').value})"
+		>Update</button>
+	</form>
+}

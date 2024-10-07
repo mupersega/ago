@@ -1,0 +1,232 @@
+package comps;
+
+import (
+	"ago/cfg"
+	"strconv"
+)
+
+templ HeaderTpl() {
+	<header>
+		<h1>HTMX Terra</h1>
+		@ConfigOptions(cfg.IslandsConfig())
+	</header>
+}
+
+templ ConfigActions() {
+	<section class="config-actions">
+		<button
+			class="button -dynamic"
+			hx-get="/display"
+			hx-target="#mini-map"
+			hx-swap="outerHTML"
+		>Get Last</button>
+		<button
+			class="button -dynamic"
+			hx-post="/new"
+			hx-target="#mini-map"
+			hx-swap="none"
+			hx-trigger="click"
+			hx-include="#config-form"
+			hx-on:htmx:after-request="window.appState.update({viewMode: '2d'})"
+		>New Map</button>
+	</section>
+}
+
+templ ConfigOptions(data cfg.MapConfig) {
+	<div class="scrollbar-clipper">
+		<form id="config-form" class="config-form">
+			<fieldset>
+				<legend>
+					<h3>General</h3>
+				</legend>
+				<div class="form-field">
+					<label for="size-form">Map Size</label>
+					<fieldset
+						id="size-form"
+						class="size-form grouped-radio"
+						_="on change remove .active-label from my children
+                    then add .active-label to target.nextElementSibling"
+					>
+						<input class="hidden-radio" type="radio" id="small-select" name="size" value="s"/>
+						<label for="small-select">s</label>
+						<input class="hidden-radio" type="radio" id="medium-select" name="size" value="m"/>
+						<label for="medium-select">m</label>
+						<input class="hidden-radio" type="radio" id="large-select" name="size" value="l" checked/>
+						<label for="large-select" class="active-label">l</label>
+						<input class="hidden-radio" type="radio" id="huge-select" name="size" value="h"/>
+						<label for="huge-select">h</label>
+					</fieldset>
+				</div>
+				<div class="form-field">
+					<label for="PostSmoothDistance">Smooth Distance</label>
+					<input type="number" id="PostSmoothDistance" name="PostSmoothDistance" value={ strconv.Itoa(data.PostSmoothDistance) } min="1" max="5" step="1"/>
+				</div>
+				<div class="form-field">
+					<label for="InitialAltitude">Base Map Height</label>
+					<select name="InitialAltitude" id="InitialAltitude">
+						<option
+							value="4"
+							if data.InitialAltitude == 4 {
+								selected
+							}
+						>Mountain</option>
+						<option
+							value="2"
+							if data.InitialAltitude == 2 {
+								selected
+							}
+						>Hills</option>
+						<option
+							value="0"
+							if data.InitialAltitude == 0 {
+								selected
+							}
+						>Plains</option>
+						<option
+							value="-2"
+							if data.InitialAltitude == -2 {
+								selected
+							}
+						>Water</option>
+						<option
+							value="-4"
+							if data.InitialAltitude == -4 {
+								selected
+							}
+						>Deep Water</option>
+					</select>
+				</div>
+			</fieldset>
+			<fieldset>
+				<legend>
+					<h3>Mountains</h3>
+				</legend>
+				<div class="form-field">
+					<label for="Mountains">Quantity</label>
+					<input type="number" id="Mountains" name="Mountains" value={ strconv.Itoa(data.Mountains) } max="20" min="0"/>
+				</div>
+				<div class="form-field">
+					<label for="MountainAltitude">Mountain Altitude</label>
+					<input
+						type="number"
+						id="MountainAltitude"
+						name="MountainAltitude"
+						value={ strconv.Itoa(data.MountainAltitude) }
+						max="10"
+						min="1"
+					/>
+				</div>
+				<div class="form-field">
+					<label for="MountainAltitudeWindow">Mountain Altitude Variance</label>
+					<input
+						type="number"
+						id="MountainAltitudeWindow"
+						name="MountainAltitudeWindow"
+						value={ strconv.Itoa(data.MountainAltitudeWindow) }
+						min="0"
+						max="9"
+					/>
+				</div>
+				<div class="form-field">
+					<label for="MountainRadius">Mountain Radius</label>
+					<input
+						type="number"
+						id="MountainRadius"
+						name="MountainRadius"
+						value={ strconv.Itoa(data.MountainRadius) }
+						min="1"
+						max="10"
+					/>
+				</div>
+				<div class="form-field">
+					<label for="MountainRadiusWindow">Mountain Radius Variance</label>
+					<input
+						type="number"
+						id="MountainRadiusWindow"
+						name="MountainRadiusWindow"
+						value={ strconv.Itoa(data.MountainRadiusWindow) }
+						min="0"
+						max="10"
+					/>
+				</div>
+			</fieldset>
+			<fieldset>
+				<legend>
+					<h3>Mountain Ranges/Clusters</h3>
+				</legend>
+				<div class="form-field">
+					<label for="MountainRanges">Quantity</label>
+					<input
+						type="number"
+						id="MountainRanges"
+						name="MountainRanges"
+						value={ strconv.Itoa(data.MountainRanges) }
+						min="0"
+						max="10"
+					/>
+				</div>
+				<div class="form-field">
+					<label for="MountainRangeSize">Mountains per Cluster</label>
+					<input
+						type="number"
+						id="MountainRangeSize"
+						name="MountainRangeSize"
+						value={ strconv.Itoa(data.MountainRangeSize) }
+						min="1"
+						max="10"
+					/>
+				</div>
+				<div class="form-field">
+					<label for="RangeSpread">Cluster Spread</label>
+					<input
+						type="number"
+						id="RangeSpread"
+						name="RangeSpread"
+						value={ strconv.Itoa(data.RangeSpread) }
+						min="1"
+						max="30"
+					/>
+				</div>
+			</fieldset>
+			<fieldset>
+				<legend>
+					<h3>Mountain Crests</h3>
+				</legend>
+				<div class="form-field">
+					<label for="DefaultRunners">Quantity</label>
+					<input
+						type="number"
+						id="DefaultRunners"
+						name="DefaultRunners"
+						value={ strconv.Itoa(data.DefaultRunners) }
+						min="0"
+						max="20"
+					/>
+				</div>
+				<div class="form-field">
+					<label for="DefaultRunnerMinlength">Crest Min Length</label>
+					<input
+						type="number"
+						id="DefaultRunnerMinlength"
+						name="DefaultRunnerMinlength"
+						value={ strconv.Itoa(data.DefaultRunnerMinlength) }
+						min="0"
+						max="5"
+					/>
+				</div>
+				<div class="form-field">
+					<label for="DefaultRunnerMaxlength">Crest Max Length</label>
+					<input
+						type="number"
+						id="DefaultRunnerMaxlength"
+						name="DefaultRunnerMaxlength"
+						value={ strconv.Itoa(data.DefaultRunnerMaxlength) }
+						min="0"
+						max="10"
+					/>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+	@ConfigActions()
+}

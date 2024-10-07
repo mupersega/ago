@@ -1,0 +1,83 @@
+package comps
+
+import (
+	"ago/factory"
+	"ago/helper"
+)
+
+templ ViewOptionsComponent() {
+	// option group two fields 2d 3d
+	<section class="view-options">
+		@MiniMapComponent(factory.TileMap{})
+		<div
+			class="button-group -joined -vertical"
+			_="
+            // load state
+            on load call window.appState.getState()
+				then if it.viewMode == '2d' add .-selected to #twodee-mode-btn
+                else if it.viewMode == '3d' add .-selected to #threedee-mode-btn end
+            // listen for view mode change
+            on 'viewModeChanged' from window
+                if event.detail.state.viewMode == '2d'
+                    remove .-selected from #threedee-mode-btn then
+                    add .-selected to #twodee-mode-btn
+                else if event.detail.state.viewMode == '3d'
+                    remove .-selected from #twodee-mode-btn then
+                    add .-selected to #threedee-mode-btn
+                end
+            end"
+		>
+			<button
+				id="twodee-mode-btn"
+				class="button -dynamic -grouped"
+				_="
+                // update state
+                on click call window.appState.update({viewMode: '2d'})"
+			>2D</button>
+			<button
+				id="threedee-mode-btn"
+				class="button -dynamic -grouped"
+				_="
+                // update state
+                on click call window.appState.update({viewMode: '3d'})"
+			>3D</button>
+		</div>
+		// <button
+		// 	class="button dynamic"
+		// 	_="on click call window.getTileMap()"
+		// >
+		// 	tm data
+		// </button>
+	</section>
+}
+
+templ MiniMapComponent(tileMap factory.TileMap) {
+	if tileMap.Tiles == nil {
+		<div id="mini-map" class="mini-map">
+			<h3>Create map...</h3>
+		</div>
+	} else {
+		<div
+			id="mini-map"
+			class={ "mini-map", tileMap.Class() }
+		>
+			for _, tile := range tileMap.Tiles {
+				for _, tile := range tile {
+					@TileComponent(tile)
+				}
+			}
+		</div>
+	}
+}
+
+templ TileComponent(tile factory.Tile) {
+	<span
+		hx-trigger="shape"
+		id={ helper.Itoa(tile.Id) }
+		hx-post={ "/shape/" + helper.Itoa(tile.Id) }
+		hx-vals="js:{magnitude: event.detail.magnitude, prescribedMagnitude: event.detail.prescribedMagnitude}"
+		hx-swap="outerHTML"
+		class={ "tile", tile.Classes() }
+		hx-target="this"
+	></span>
+}

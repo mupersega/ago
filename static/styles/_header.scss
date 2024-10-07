@@ -1,0 +1,280 @@
+header {
+    grid-area: config;
+    display: grid;
+    grid-template-columns: min-content 1fr;
+    grid-template-rows: 1fr min-content;
+    grid-template-areas:
+        "title config-form"
+        "config-actions config-form";
+    padding: 6px;
+
+    h1 {
+        padding: $golden-double;
+        align-self: center;
+
+        @include respond-up(md) {
+            padding: 0px;
+            padding-left: $golden-double;
+            align-self: flex-start;
+        }
+    }
+
+    .scrollbar-clipper {
+        grid-area: config-form;
+
+        @include respond-up(md) {
+            margin: 6px;
+            margin-bottom: 0;
+        }
+
+        .config-form {
+            display: flex;
+            flex-direction: row;
+            overflow-y: hidden;
+            direction: ltr;
+            gap: $single-unit;
+            padding: $golden-double;
+            padding-top: $single-unit;
+            overflow-y: hidden;
+            height: 100%;
+
+            &::-webkit-scrollbar {
+                width: 12px;
+                padding: 3px;
+            }
+
+            &::-webkit-scrollbar-track {
+                background: $secondary-tr;
+                border-radius: 0.3em;
+                border-top-right-radius: 0px;
+                border-top-left-radius: 0px;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background-color: $accent;
+                background: linear-gradient(to right,
+                        $secondary 0%,
+                        $accent 30%,
+                        $accent 60%,
+                        $secondary 100%);
+                border-radius: 0.3em;
+                border-top-right-radius: 0px;
+                border-top-left-radius: 0px;
+            }
+
+            &::-webkit-scrollbar-thumb:hover {
+                background-color: $secondary;
+            }
+
+            @include respond-up(md) {
+                display: flex;
+                flex-direction: column;
+                overflow-y: scroll;
+                overflow-x: hidden;
+                direction: rtl;
+
+                &::-webkit-scrollbar {
+                    width: 12px;
+                    padding: 3px;
+                }
+
+                &::-webkit-scrollbar-track {
+                    background: $secondary-tr;
+                    border-radius: 0.3em;
+                    border-top-right-radius: 0px;
+                    border-bottom-right-radius: 0px;
+                    margin-left: 2px;
+                }
+
+                &::-webkit-scrollbar-thumb {
+                    background-color: $accent;
+                    background: linear-gradient(to top,
+                            $secondary 0%,
+                            $accent 30%,
+                            $accent 60%,
+                            $secondary 100%);
+                    border-radius: 0.3em;
+                    border-top-right-radius: 0px;
+                    border-bottom-right-radius: 0px;
+                }
+
+                &::-webkit-scrollbar-thumb:hover {
+                    background-color: $secondary;
+                }
+            }
+
+            fieldset {
+                direction: ltr;
+                display: flex;
+                flex-direction: column;
+                gap: $golden-double;
+                padding: $golden-double;
+                border: 1px solid $light;
+                border-radius: $golden-double;
+                min-width: max-content;
+
+                &:focus-within {
+                    @extend .focus-border;
+                    @extend .focus-shadow;
+                }
+
+                &:hover {
+                    border-color: $accent;
+                }
+
+                legend {
+                    font-size: larger;
+                    padding: 0 $golden-double;
+                    cursor: pointer;
+                    user-select: none;
+                }
+
+                .form-field {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: space-between;
+
+                    label {
+                        font-size: smaller;
+                        padding: 0 $golden-double;
+                        cursor: pointer;
+                        user-select: none;
+                    }
+
+                    input {
+                        border: 1px dashed $light;
+                        border-radius: $golden-double;
+                        padding: $golden-double;
+                        text-align: center;
+                        width: 80px;
+
+                        &:focus-within {
+                            @extend .focus-outline;
+                            @extend .focus-shadow;
+                        }
+                    }
+
+                    select {
+                        border: 1px dashed $light;
+                        border-radius: $golden-double;
+                        padding: $golden-double;
+                        text-align: center;
+                        width: 110px;
+
+                        &:focus-within {
+                            @extend .focus-outline;
+                            @extend .focus-shadow;
+                        }
+                    }
+                }
+
+                &.grouped-radio {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-evenly;
+                    gap: 0px;
+                    padding: 0px;
+                    overflow: hidden;
+                    border-radius: $golden-triple;
+
+                    .hidden-radio {
+                        display: none;
+                    }
+
+                    .active-label {
+                        background-color: rgb(255, 23, 255);
+                        color: white;
+
+                        &:hover {
+                            background-color: rgb(255, 23, 255);
+                        }
+                    }
+
+                    label {
+                        border-right: 1px solid $light;
+
+                        &:last-child {
+                            border-right: none;
+                        }
+
+                        &:hover {
+                            background-color: $light;
+                        }
+
+                        &:active {
+                            background-color: rgb(255, 23, 255);
+                            color: white;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @include respond-up(md) {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    &:has(.button:focus) {
+        .scrollbar-clipper {
+            @extend .focus-border;
+            @extend .focus-shadow;
+        }
+    }
+
+    .scrollbar-clipper:focus-within {
+        @extend .focus-border;
+        @extend .focus-shadow;
+    }
+
+    .config-actions {
+        direction: ltr;
+        display: flex;
+        width: 100%;
+        height: fit-content;
+        flex-direction: column;
+        justify-content: center;
+        gap: $single-unit;
+        margin-bottom: $triple-unit;
+        z-index: 0;
+
+        .button {
+            // Ideally this should be the same as main button in vars with changes
+            border: 1px solid $light;
+            border-radius: $golden-double;
+            border-right: 1px solid $clear;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+
+            border- &:hover {
+                @extend .focus-border;
+            }
+        }
+    }
+
+    .config-actions {
+        @include respond-up(md) {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+            width: 100%;
+            gap: $golden-double;
+            padding-right: $golden-double;
+            margin-right: 14px;
+
+            .button {
+                // Ideally this should be the same as main button in vars with changes
+                border: 1px solid $light;
+                border-radius: $golden-double;
+                border-top: 1px solid $clear;
+                border-top-left-radius: 0;
+                border-top-right-radius: 0;
+            }
+        }
+    }
+}

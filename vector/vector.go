@@ -7,8 +7,8 @@ import (
 
 // Vec2 represents a 2D vector with X and Y coordinates.
 type Vec2 struct {
-	X float64 // X component of the vector
-	Y float64 // Y component of the vector
+	X float64 `json:"x"` // X component of the vector
+	Y float64 `json:"y"` // Y component of the vector
 }
 
 // Add adds two vectors and returns the resulting vector.

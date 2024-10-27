@@ -15,14 +15,18 @@ templ ViewOptionsComponent() {
             // load state
             on load call window.appState.getState()
 				then if it.viewMode == '2d' add .-selected to #twodee-mode-btn
+				else if it.viewMode == '2dline' add .-selected to #twodeeline-mode-btn
                 else if it.viewMode == '3d' add .-selected to #threedee-mode-btn end
             // listen for view mode change
             on 'viewModeChanged' from window
                 if event.detail.state.viewMode == '2d'
-                    remove .-selected from #threedee-mode-btn then
+                    take .-selected then
                     add .-selected to #twodee-mode-btn
+				else if event.detail.state.viewMode == '2dline'
+					take .-selected then
+					add .-selected to #twodeeline-mode-btn
                 else if event.detail.state.viewMode == '3d'
-                    remove .-selected from #twodee-mode-btn then
+                    take .-selected then
                     add .-selected to #threedee-mode-btn
                 end
             end"
@@ -34,6 +38,13 @@ templ ViewOptionsComponent() {
                 // update state
                 on click call window.appState.update({viewMode: '2d'})"
 			>2D</button>
+			<button
+				id="twodeeline-mode-btn"
+				class="button -dynamic -grouped"
+				_="
+				// update state
+				on click call window.appState.update({viewMode: '2dline'})"
+			>Line</button>
 			<button
 				id="threedee-mode-btn"
 				class="button -dynamic -grouped"

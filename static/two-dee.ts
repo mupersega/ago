@@ -1,10 +1,14 @@
+import { rand } from "three/webgpu";
 import { tileMapData } from "./data.ts";
+import { MapBuildData, Line } from "./interface.ts";
+import { randInt } from "three/src/math/MathUtils.js";
 
 class TwoDeeCanvas {
   private canvas: HTMLCanvasElement;
   private context: CanvasRenderingContext2D;
   private width: number;
   private height: number;
+  private dashModifer: number[];
 
   constructor(canvasId: string, segments: number = 1) {
     const canvas = document.getElementById(canvasId);
@@ -33,6 +37,8 @@ class TwoDeeCanvas {
     this.canvas.width = minSize;
     this.canvas.height = minSize;
 
+    this.setupRandomDashes();
+
     this.width = this.canvas.width;
     this.height = this.canvas.height;
 
@@ -51,6 +57,17 @@ class TwoDeeCanvas {
     return this.height;
   }
 
+  setupRandomDashes() {
+    this.dashModifer = [];
+    let dashCount = 0;
+    for (let i = 0; i < 10; i++) {
+      const dash = randInt(1, 4);
+      dashCount += dash;
+      this.dashModifer.push(dash);
+    }
+    console.log("dashModifer", this.dashModifer);
+  }
+
   drawFillRectangle(
     x: number,
     y: number,
@@ -62,23 +79,73 @@ class TwoDeeCanvas {
     this.context.fillRect(x, y, width, height);
   }
 
+  drawLine(x1: number, y1: number, x2: number, y2: number, color: string) {
+    const mod = randInt(1, 2);
+    const posmod = randInt(0, 6);
+    const dashslice = this.dashModifer.slice(posmod, posmod + mod);
+    this.context.strokeStyle = color;
+    this.context.beginPath();
+    this.context.lineWidth = randInt(1, 2);
+    this.context.moveTo(x1, y1);
+    this.context.lineTo(x2, y2);
+    this.context.setLineDash(dashslice);
+    this.context.stroke();
+  }
+
+  drawPath(path: Path, color: string) {
+    const { lines } = path;
+    if (lines.length < 2) {
+      return;
+    }
+    this.context.strokeStyle = color;
+    this.context.beginPath();
+    this.context.moveTo(lines[0].x, lines[0].y);
+    for (let i = 1; i < lines.length; i++) {
+      this.context.lineTo(lines[i].x, lines[i].y);
+    }
+    this.context.stroke();
+  }
+
   clear() {
     this.context.clearRect(0, 0, this.width, this.height);
   }
 }
 
-const setup2d = () => {
-  build2dTileMap();
+const setup2d = async () => {
+  const data = await getMapData();
+  build2dTileMap(data);
+  stopRenderLoop();
+  build2dAnimationLayer(data);
   buildInteractiveGrid();
+};
+
+const setup2dLine = async () => {
+  const data = await getMapData();
+  build2dLineMap(data);
 };
 
 let activeRenderId: null | number = null; // Global variable to track the current animation frame ID
 
-const build2dTileMap = async (loadTime: number = 1000) => {
+const stopRenderLoop = () => {
+  if (activeRenderId !== null) {
+    cancelAnimationFrame(activeRenderId);
+    activeRenderId = null; // Reset to indicate no active render
+  }
+};
+
+const getMapData = async () => {
   const data = await tileMapData();
   if (!data) {
     throw new Error("Could not fetch tile map data");
   }
+  return data;
+};
+
+const build2dTileMap = async (
+  mapData: MapBuildData,
+  loadTime: number = 2000
+) => {
+  const data = mapData;
 
   const worldWidth = data.width;
   const worldHeight = data.height;
@@ -94,7 +161,7 @@ const build2dTileMap = async (loadTime: number = 1000) => {
     0,
     canvas.canvasWidth,
     canvas.canvasHeight,
-    "#fff"
+    "rgba(255, 255, 255, 0)"
   );
 
   const midX = Math.floor(worldWidth / 2);
@@ -207,11 +274,121 @@ const canvasResize = () => {
   setup2d();
 };
 
+const build2dLineMap = async (mapData: MapBuildData) => {
+  const data = mapData;
+
+  const worldWidth = data.width;
+  const worldHeight = data.height;
+
+  const canvas = new TwoDeeCanvas("twodeeline-view", data.height);
+  canvas.clear();
+
+  const tilewidth = canvas.canvasWidth / worldWidth;
+  const tileHeight = canvas.canvasHeight / worldHeight;
+
+  canvas.drawFillRectangle(
+    0,
+    0,
+    canvas.canvasWidth,
+    canvas.canvasHeight,
+    "rgba(255, 255, 255, 0)"
+  );
+
+  const flatLines: Line[] = [];
+  Object.values(data.lines).forEach((lineSet) => {
+    flatLines.push(...lineSet);
+  });
+  // shuffle
+  flatLines.forEach((line) => {
+    const x1 = line.start.x * tilewidth;
+    const y1 = line.start.y * tileHeight;
+    const x2 = line.end.x * tilewidth;
+    const y2 = line.end.y * tileHeight;
+
+    canvas.drawLine(x1, y1, x2, y2, line.color);
+  });
+};
+
+const build2dAnimationLayer = async (mapData: MapBuildData) => {
+  const data = mapData;
+
+  const worldWidth = data.width;
+  const worldHeight = data.height;
+
+  const canvas = new TwoDeeCanvas("twodee-animation-layer", data.height);
+  canvas.clear();
+
+  const tilewidth = canvas.canvasWidth / worldWidth;
+  const tileHeight = canvas.canvasHeight / worldHeight;
+
+  canvas.drawFillRectangle(
+    0,
+    0,
+    canvas.canvasWidth,
+    canvas.canvasHeight,
+    "rgba(255, 255, 255, 0)"
+  );
+
+  const flatLines: Line[] = [];
+  Object.values(data.lines).forEach((lineSet) => {
+    flatLines.push(...lineSet);
+  });
+  const shuffledLines = flatLines.sort(() => Math.random() - 0.5);
+
+  const totalLines = shuffledLines.length;
+  const startTime = performance.now();
+
+  let count = 0;
+
+  // Cubic easing function (ease-in)
+  // const easeInCubic = (t) => t * t * t * t;
+
+  // Cubic easing function (ease-out)
+  const easeOutCubic = (t) => --t * t * t + 1;
+
+  const renderLine = () => {
+    const currentTime = performance.now();
+    const elapsedTime = currentTime - startTime;
+
+    // Calculate normalized time (between 0 and 1)
+    const t = Math.min(elapsedTime / 2000, 1); // Ensure t never exceeds 1
+
+    // Apply the cubic easing function to determine the progress
+    const easedT = easeOutCubic(t);
+
+    // Calculate how many lines should be rendered based on the eased time
+    const expectedLines = Math.floor(easedT * totalLines);
+
+    // Render as many lines as needed to catch up
+    while (count < expectedLines && shuffledLines.length > 0) {
+      const line = shuffledLines.pop();
+      if (!line) {
+        return;
+      }
+
+      const x1 = line.start.x * tilewidth;
+      const y1 = line.start.y * tileHeight;
+      const x2 = line.end.x * tilewidth;
+      const y2 = line.end.y * tileHeight;
+
+      canvas.drawLine(x1, y1, x2, y2, line.color);
+      count++;
+    }
+
+    if (count < totalLines) {
+      activeRenderId = requestAnimationFrame(renderLine);
+    }
+  };
+
+  activeRenderId = requestAnimationFrame(renderLine);
+};
+
 export {
   TwoDeeCanvas,
   build2dTileMap,
   buildInteractiveGrid,
   setup2d,
+  setup2dLine,
   canvasResize,
   hideCanvases,
   revealCanvases,

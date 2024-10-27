@@ -451,3 +451,89 @@ func (tm TileMap) DrawFilledCircle(x, y, radius, altitude int) {
 		}
 	}
 }
+
+type Line struct {
+	Start vector.Vec2 `json:"start"`
+	End   vector.Vec2 `json:"end"`
+	Color string      `json:"color"`
+}
+
+func isLeftEdge(x int) bool {
+	return x == 0
+}
+
+func isRightEdge(x, width int) bool {
+	return x == width-1
+}
+
+func isTopEdge(y int) bool {
+	return y == 0
+}
+
+func isBottomEdge(y, height int) bool {
+	return y == height-1
+}
+
+func (tm TileMap) GetAltitudeOutlines(altitude int) []Line {
+	lines := make([]Line, 0)
+	color := GetColor(altitude, 1)
+	for _, tile := range tm.Tiles {
+		for _, t := range tile {
+			if t.Altitude < altitude {
+				continue
+			}
+			// if is top edge or north neighbour is < altitude then create upper line
+			if isTopEdge(t.Y) || tm.AltAt(t.X, t.Y-1) < altitude {
+				lines = append(lines, Line{
+					Start: vector.Vec2{X: float64(t.X), Y: float64(t.Y)},
+					End:   vector.Vec2{X: float64(t.X + 1), Y: float64(t.Y)},
+					Color: color.Hex,
+				})
+			}
+			// if is right edge or east neighbour is < altitude then create right line
+			if isRightEdge(t.X, tm.Width) || tm.AltAt(t.X+1, t.Y) < altitude {
+				lines = append(lines, Line{
+					Start: vector.Vec2{X: float64(t.X + 1), Y: float64(t.Y)},
+					End:   vector.Vec2{X: float64(t.X + 1), Y: float64(t.Y + 1)},
+					Color: color.Hex,
+				})
+			}
+			// if is bottom edge or south neighbour is < altitude then create lower line
+			if isBottomEdge(t.Y, tm.Height) || tm.AltAt(t.X, t.Y+1) < altitude {
+				lines = append(lines, Line{
+					Start: vector.Vec2{X: float64(t.X), Y: float64(t.Y + 1)},
+					End:   vector.Vec2{X: float64(t.X + 1), Y: float64(t.Y + 1)},
+					Color: color.Hex,
+				})
+			}
+			// if is left edge or west neighbour is < altitude then create left line
+			if isLeftEdge(t.X) || tm.AltAt(t.X-1, t.Y) < altitude {
+				lines = append(lines, Line{
+					Start: vector.Vec2{X: float64(t.X), Y: float64(t.Y)},
+					End:   vector.Vec2{X: float64(t.X), Y: float64(t.Y + 1)},
+					Color: color.Hex,
+				})
+			}
+		}
+	}
+	deduped := tm.removeDuplicates(lines)
+
+	return deduped
+}
+
+func (tm TileMap) removeDuplicates(lines []Line) []Line {
+	unique := make([]Line, 0)
+	for _, line := range lines {
+		found := false
+		for _, u := range unique {
+			if u.Start == line.Start && u.End == line.End {
+				found = true
+				break
+			}
+		}
+		if !found {
+			unique = append(unique, line)
+		}
+	}
+	return unique
+}

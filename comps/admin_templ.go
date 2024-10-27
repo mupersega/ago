@@ -39,7 +39,7 @@ func GuiComp() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form action=\"none\" name=\"state\" class=\"gui-comp\"><label for=\"user\">User</label> <input type=\"text\" id=\"user\" name=\"user\" placeholder=\"Email\" value=\"Admin\"> <label for=\"mode\">Mode</label> <select type=\"text\" id=\"mode\" name=\"password\" placeholder=\"Password\"><option value=\"2d\" selected>2d</option> <option value=\"3d\">3d</option></select> <button class=\"button -dynamic\" _=\"on click halt the event then call window.appState.update({user: document.getElementById(&#39;user&#39;).value, viewMode: document.getElementById(&#39;mode&#39;).value})\">Update</button></form>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form action=\"none\" name=\"state\" class=\"gui-comp\"><label for=\"user\">User</label> <input type=\"text\" id=\"user\" name=\"user\" placeholder=\"Email\" value=\"Admin\"> <label for=\"mode\">Mode</label> <select type=\"text\" id=\"mode\" name=\"password\" placeholder=\"Password\"><option value=\"2d\" selected>2d</option> <option value=\"Line\">Line</option> <option value=\"3d\">3d</option></select> <button class=\"button -dynamic\" _=\"on click halt the event then call window.appState.update({user: document.getElementById(&#39;user&#39;).value, viewMode: document.getElementById(&#39;mode&#39;).value})\">Update</button></form>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

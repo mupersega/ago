@@ -42,7 +42,7 @@ func ViewOptionsComponent() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"button-group -joined -vertical\" _=\"\n            // load state\n            on load call window.appState.getState()\n\t\t\t\tthen if it.viewMode == &#39;2d&#39; add .-selected to #twodee-mode-btn\n                else if it.viewMode == &#39;3d&#39; add .-selected to #threedee-mode-btn end\n            // listen for view mode change\n            on &#39;viewModeChanged&#39; from window\n                if event.detail.state.viewMode == &#39;2d&#39;\n                    remove .-selected from #threedee-mode-btn then\n                    add .-selected to #twodee-mode-btn\n                else if event.detail.state.viewMode == &#39;3d&#39;\n                    remove .-selected from #twodee-mode-btn then\n                    add .-selected to #threedee-mode-btn\n                end\n            end\"><button id=\"twodee-mode-btn\" class=\"button -dynamic -grouped\" _=\"\n                // update state\n                on click call window.appState.update({viewMode: &#39;2d&#39;})\">2D</button> <button id=\"threedee-mode-btn\" class=\"button -dynamic -grouped\" _=\"\n                // update state\n                on click call window.appState.update({viewMode: &#39;3d&#39;})\">3D</button></div></section>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"button-group -joined -vertical\" _=\"\n            // load state\n            on load call window.appState.getState()\n\t\t\t\tthen if it.viewMode == &#39;2d&#39; add .-selected to #twodee-mode-btn\n\t\t\t\telse if it.viewMode == &#39;2dline&#39; add .-selected to #twodeeline-mode-btn\n                else if it.viewMode == &#39;3d&#39; add .-selected to #threedee-mode-btn end\n            // listen for view mode change\n            on &#39;viewModeChanged&#39; from window\n                if event.detail.state.viewMode == &#39;2d&#39;\n                    take .-selected then\n                    add .-selected to #twodee-mode-btn\n\t\t\t\telse if event.detail.state.viewMode == &#39;2dline&#39;\n\t\t\t\t\ttake .-selected then\n\t\t\t\t\tadd .-selected to #twodeeline-mode-btn\n                else if event.detail.state.viewMode == &#39;3d&#39;\n                    take .-selected then\n                    add .-selected to #threedee-mode-btn\n                end\n            end\"><button id=\"twodee-mode-btn\" class=\"button -dynamic -grouped\" _=\"\n                // update state\n                on click call window.appState.update({viewMode: &#39;2d&#39;})\">2D</button> <button id=\"twodeeline-mode-btn\" class=\"button -dynamic -grouped\" _=\"\n\t\t\t\t// update state\n\t\t\t\ton click call window.appState.update({viewMode: &#39;2dline&#39;})\">Line</button> <button id=\"threedee-mode-btn\" class=\"button -dynamic -grouped\" _=\"\n                // update state\n                on click call window.appState.update({viewMode: &#39;3d&#39;})\">3D</button></div></section>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -149,7 +149,7 @@ func TileComponent(tile factory.Tile) templ.Component {
 		var templ_7745c5c3_Var7 string
 		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(helper.Itoa(tile.Id))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `comps/view-options.templ`, Line: 76, Col: 27}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `comps/view-options.templ`, Line: 87, Col: 27}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 		if templ_7745c5c3_Err != nil {
@@ -162,7 +162,7 @@ func TileComponent(tile factory.Tile) templ.Component {
 		var templ_7745c5c3_Var8 string
 		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs("/shape/" + helper.Itoa(tile.Id))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `comps/view-options.templ`, Line: 77, Col: 44}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `comps/view-options.templ`, Line: 88, Col: 44}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 		if templ_7745c5c3_Err != nil {

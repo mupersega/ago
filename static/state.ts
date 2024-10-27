@@ -1,4 +1,4 @@
-import { build2dTileMap, setup2d } from "./two-dee";
+import { setup2d, setup2dLine } from "./two-dee";
 import { setup3d } from "./three-dee";
 
 type Listener<T> = (newState: T, oldState: T) => void;
@@ -87,8 +87,10 @@ function processViewModeChange(newState: AppState, oldState: AppState) {
 
   if (newState.viewMode === "2d") {
     setup2d();
-  } else {
+  } else if (newState.viewMode === "3d") {
     setup3d();
+  } else if (newState.viewMode === "2dline") {
+    setup2dLine();
   }
 }
 

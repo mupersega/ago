@@ -66,13 +66,13 @@ func main() {
 		case "l":
 			size = 70
 		case "h":
-			size = 300
+			size = 200
 		default:
 			size = 30
 		}
 
 		tm := factory.NewTileMap(maxAltitude, size, size, ConfigFromRequest(r))
-
+		// tm.GetAltitudeOutlines(9)
 		user := store.GetUser(userId)
 		user = user.SetTileMap(tm)
 		store.SetUser(userId, user)
@@ -253,10 +253,11 @@ func GetUserId(r *http.Request) (string, error) {
 }
 
 type MapData struct {
-	TileBoxes   []factory.Box `json:"tileBoxes"`
-	OtherMeshes []factory.Box `json:"otherMeshes"`
-	Width       int           `json:"width"`
-	Height      int           `json:"height"`
+	TileBoxes   []factory.Box          `json:"tileBoxes"`
+	OtherMeshes []factory.Box          `json:"otherMeshes"`
+	Width       int                    `json:"width"`
+	Height      int                    `json:"height"`
+	Lines       map[int][]factory.Line `json:"lines"`
 }
 
 func (m MapData) AsJson() (string, error) {
@@ -335,6 +336,13 @@ func BuildMapData(tm factory.TileMap) MapData {
 
 	mapBuildData.Width = tm.Width
 	mapBuildData.Height = tm.Height
+
+	mapBuildData.Lines = make(map[int][]factory.Line)
+	// altitudeOutlines := []int{5}
+	// for altitudes 5-9, get the outlines
+	for i := 0; i < 10; i++ {
+		mapBuildData.Lines[i] = tm.GetAltitudeOutlines(i)
+	}
 
 	return mapBuildData
 }

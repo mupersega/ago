@@ -5,6 +5,7 @@ import * as BufferGeometryUtils from "three/addons/utils/BufferGeometryUtils.js"
 
 import GUI from "lil-gui";
 import { tileMapData } from "./data";
+import { MapBuildData } from "./interface";
 
 interface ThreeDeeObject {
   geometry: THREE.BufferGeometry;
@@ -25,7 +26,7 @@ class ThreeDeeScene {
 
   constructor(private displayId: string, segments: number) {
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0xffffff);
+    this.scene.background = null;
     this.segments = segments;
     const display = document.getElementById(this.displayId);
 
@@ -56,7 +57,11 @@ class ThreeDeeScene {
   }
 
   private setupRenderer(width: number, height: number): void {
-    this.renderer = new THREE.WebGLRenderer({ canvas: this.displayElement });
+    this.renderer = new THREE.WebGLRenderer({
+      canvas: this.displayElement,
+      antialias: true,
+      alpha: true,
+    });
     this.renderer.setSize(width, height);
   }
 
@@ -235,11 +240,8 @@ class ThreeDeeScene {
   }
 }
 
-const build3dTilemap = async () => {
-  const data = await tileMapData();
-  if (!data) {
-    throw new Error("Could not fetch tile map data");
-  }
+const build3dTilemap = async (mapData: MapBuildData) => {
+  const data = mapData;
   const threeDeeScene = new ThreeDeeScene("threedee-view", data.height);
   const tileGeometries: THREE.BufferGeometry[] = [];
   data.tileBoxes.forEach((tile) => {
@@ -314,8 +316,21 @@ declare global {
   }
 }
 
-const setup3d = () => {
-  build3dTilemap();
+const build3dLayers = (mapData: MapBuildData) => {
+  const data = mapData;
+
+  // create a shape from lines
+  const shape = new THREE.Shape();
+};
+
+const setup3d = async () => {
+  const data = await tileMapData();
+  if (!data) {
+    throw new Error("Could not fetch tile map data");
+  }
+
+  build3dTilemap(data);
+  build3dLayers();
 };
 
 export { setup3d };

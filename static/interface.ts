@@ -3,6 +3,7 @@ interface MapBuildData {
   otherMeshes: TileBox[];
   width: number;
   height: number;
+  lines: { [key: number]: Line[] };
 }
 
 interface TileBox {
@@ -17,4 +18,19 @@ interface TileBox {
   };
 }
 
-export { MapBuildData, TileBox };
+interface Vector2 {
+  x: number;
+  y: number;
+}
+
+interface Path {
+  lines: Vector2[];
+}
+
+interface Line {
+  start: Vector2;
+  end: Vector2;
+  color: string;
+}
+
+export { MapBuildData, TileBox, Vector2, Path, Line };
